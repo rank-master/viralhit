@@ -1,0 +1,340 @@
+/* Color Palette */
+:root {
+  --primary-gradient: linear-gradient(135deg, #86e3ce, #d3f8e2);
+  --accent: #ff7a59;
+  --secondary: #5d5d5d;
+  --highlight: #ffdf7c;
+  --light: #ffffff;
+  --dark: #2c2c2c;
+  --shadow: rgba(0, 0, 0, 0.05);
+}
+
+/* Base Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  line-height: 1.6;
+  background: var(--primary-gradient);
+  color: var(--dark);
+  min-height: 100vh;
+}
+
+/* Navigation */
+.navbar {
+  position: sticky;
+  top: 0;
+  background: var(--light);
+  padding: 1.5rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 4px 12px var(--shadow);
+  z-index: 1000;
+  border-bottom: 2px solid var(--highlight);
+}
+
+.logo {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+  font-size: 1.5rem;
+  color: var(--accent);
+}
+
+.logo span {
+  color: var(--secondary);
+}
+
+.nav-menu.desktop-menu {
+  list-style: none;
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+.nav-menu.desktop-menu li a {
+  color: var(--secondary);
+  text-decoration: none;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  font-size: 1.1rem;
+  padding: 0.5rem 1rem;
+  border-radius: 25px;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.nav-menu.desktop-menu li a:hover,
+.nav-menu.desktop-menu li a:focus {
+  background: var(--highlight);
+  color: var(--text-color);
+  transform: scale(1.05);
+}
+
+/* Mobile Menu Toggle Button */
+#menu-toggle {
+  display: none; /* Hidden by default on larger screens */
+  font-size: 1.5rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+/* Mobile Navigation Menu */
+.nav-menu.mobile-menu {
+  display: none; /* Hidden by default */
+  list-style: none;
+  flex-direction: column;
+  gap: 1rem;
+  background: var(--light);
+  position: absolute;
+  top: 60px;
+  right: 0;
+  width: 100%;
+  padding: 1rem;
+  box-shadow: 0 4px 12px var(--shadow);
+}
+
+.nav-menu.mobile-menu.active {
+  display: flex; /* Show the menu when active */
+}
+
+.nav-menu.mobile-menu li a {
+  color: var(--secondary);
+  text-decoration: none;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  font-size: 1.1rem;
+  padding: 0.5rem 1rem;
+  border-radius: 25px;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.nav-menu.mobile-menu li a:hover,
+.nav-menu.mobile-menu li a:focus {
+  background: var(--highlight);
+  color: var(--text-color);
+  transform: scale(1.05);
+}
+
+/* Hero Section */
+.hero {
+  padding: 6rem 2rem;
+  text-align: center;
+}
+
+.hero-content h1 {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  color: var(--dark);
+}
+
+.hero-content p {
+  font-size: 1.25rem;
+  max-width: 600px;
+  margin: 0 auto 2rem;
+  color: var(--secondary);
+}
+
+.cta-button {
+  padding: 1rem 2.5rem;
+  background: var(--accent);
+  color: var(--light);
+  border-radius: 30px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: transform 0.2s ease;
+  box-shadow: 0 4px 12px rgba(255, 122, 89, 0.3);
+}
+
+.cta-button:hover {
+  transform: translateY(-3px);
+}
+
+/* Education Section */
+.education {
+  padding: 4rem 2rem;
+  background: var(--light);
+}
+
+.steps {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.step {
+  text-align: center;
+  padding: 2rem;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 15px;
+  box-shadow: 0 4px 12px var(--shadow);
+  transition: transform 0.2s ease;
+}
+
+.step:hover {
+  transform: translateY(-5px);
+}
+
+.step .icon {
+  background: var(--accent);
+  color: var(--light);
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  margin: 0 auto 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+/* Product Section */
+.product-section {
+  padding: 4rem 2rem;
+}
+
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+.product-card {
+  background: var(--light);
+  border-radius: 20px;
+  box-shadow: 0 6px 18px var(--shadow);
+  overflow: hidden;
+  transition: transform 0.2s ease;
+}
+
+.product-card:hover {
+  transform: translateY(-5px);
+}
+
+.card-header {
+  padding: 1.5rem;
+  text-align: center;
+}
+
+.card-header h2 {
+  color: var(--light);
+  margin: 0;
+  padding: 1rem 0;
+}
+
+.card-body {
+  padding: 1.5rem;
+  text-align: center;
+}
+
+.price {
+  color: var(--accent);
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.buy-btn {
+  display: inline-block;
+  margin-top: 1rem;
+  padding: 0.75rem 2rem;
+  background: var(--accent);
+  color: var(--light);
+  border-radius: 25px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: background 0.3s ease;
+}
+
+.buy-btn:hover {
+  background: #ff5c38;
+}
+
+/* Package Colors */
+.bronze { background: #86e3ce; }
+.gold { background: #ffd700; }
+.diamond { background: #a0d8ef; }
+
+/* Group Chats */
+.group-chats {
+  padding: 4rem 2rem;
+  text-align: center;
+}
+
+.chat-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.chat-item {
+  background: var(--light);
+  padding: 1.5rem;
+  border-radius: 15px;
+  box-shadow: 0 4px 12px var(--shadow);
+  text-decoration: none;
+  color: var(--dark);
+  transition: transform 0.2s ease;
+}
+
+.chat-item:hover {
+  transform: translateY(-3px);
+}
+
+/* Footer */
+footer {
+  padding: 2rem;
+  text-align: center;
+  background: var(--light);
+  margin-top: 4rem;
+}
+
+footer a {
+  color: var(--accent);
+  text-decoration: none;
+  margin-left: 0.5rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .hero-content h1 {
+      font-size: 2.5rem;
+  }
+
+  .nav-menu.desktop-menu {
+      display: none;
+  }
+
+  #menu-toggle {
+      display: block;
+  }
+
+  .product-grid {
+      grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .logo {
+      font-size: 1.25rem;
+  }
+
+  .hero-content h1 {
+      font-size: 2rem;
+  }
+
+  .hero-content p {
+      font-size: 1rem;
+  }
+
+  .cta-button {
+      padding: 0.75rem 1.5rem;
+  }
+}
