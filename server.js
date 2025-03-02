@@ -22,9 +22,23 @@ app.use(express.static(path.join(__dirname, './public')));
 // API Routes
 app.use('/api/auth', authRoutes);
 
-// Serve the frontend for all other routes
+// Define a redirect map for specific routes
+const redirectMap = {
+  '/auth': '/auth.html',
+  '/bronze-package': '/bronze-package.html',
+  '/gold-package': '/gold-package.html',
+  '/diamond-package': '/diamond-package.html'
+};
+
+// Fallback Route for Unmatched Paths
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, './public/index.html'));
+  if (redirectMap[req.path]) {
+    // Redirect to the corresponding .html file
+    res.redirect(301, redirectMap[req.path]); // 301 = Permanent Redirect
+  } else {
+    // Serve the custom 404 page
+    res.status(404).sendFile(path.join(__dirname, './public', '404.html'));
+  }
 });
 
 // Connect to MongoDB
