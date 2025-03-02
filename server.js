@@ -6,7 +6,7 @@ const path = require('path');
 
 // Route imports
 const authRoutes = require('./routes/auth');
-const courseRoutes = require('./routes/courses');
+//const courseRoutes = require('./routes/courses');
 const referralRoutes = require('./routes/referrals');
 
 // Initialize app
