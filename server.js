@@ -6,8 +6,6 @@ const path = require('path');
 
 // Route imports
 const authRoutes = require('./routes/auth');
-//const courseRoutes = require('./routes/courses');
-//const referralRoutes = require('./routes/referrals');
 
 // Initialize app
 const app = express();
@@ -18,17 +16,15 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Serve static files from frontend folder
-app.use(express.static(path.join(__dirname, '../frontend')));
+// Serve static files from the "public" folder
+app.use(express.static(path.join(__dirname, './public')));
 
 // API Routes
 app.use('/api/auth', authRoutes);
-//app.use('/api/courses', courseRoutes);
-//app.use('/api/referrals', referralRoutes);
 
-// Serve frontend for any other routes
+// Serve the frontend for all other routes
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../frontend/index.html'));
+  res.sendFile(path.join(__dirname, './public/index.html'));
 });
 
 // Connect to MongoDB
