@@ -27,7 +27,8 @@ const redirectMap = {
   '/auth': '/auth.html',
   '/bronze-package': '/bronze-package.html',
   '/gold-package': '/gold-package.html',
-  '/diamond-package': '/diamond-package.html'
+  '/diamond-package': '/diamond-package.html',
+  '/dashboard': '/dashboard.html'
 };
 
 // Fallback Route for Unmatched Paths
