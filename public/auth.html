@@ -256,6 +256,7 @@
                 });
                 const result = await response.json();
                 if (response.ok) {
+                    localStorage.setItem('token', result.token);
                     showNotification(result.message, 'success');
                     setTimeout(() => window.location.href = '/dashboard', 1000); // Redirect to dashboard
                 } else {
