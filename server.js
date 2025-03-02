@@ -7,7 +7,7 @@ const path = require('path');
 // Route imports
 const authRoutes = require('./routes/auth');
 //const courseRoutes = require('./routes/courses');
-const referralRoutes = require('./routes/referrals');
+//const referralRoutes = require('./routes/referrals');
 
 // Initialize app
 const app = express();
@@ -23,8 +23,8 @@ app.use(express.static(path.join(__dirname, '../frontend')));
 
 // API Routes
 app.use('/api/auth', authRoutes);
-app.use('/api/courses', courseRoutes);
-app.use('/api/referrals', referralRoutes);
+//app.use('/api/courses', courseRoutes);
+//app.use('/api/referrals', referralRoutes);
 
 // Serve frontend for any other routes
 app.get('*', (req, res) => {
