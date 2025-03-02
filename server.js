@@ -6,6 +6,7 @@ const path = require('path');
 
 // Route imports
 const authRoutes = require('./routes/auth');
+const userRoutes = require('./routes/user');
 
 // Initialize app
 const app = express();
@@ -21,6 +22,7 @@ app.use(express.static(path.join(__dirname, './public')));
 
 // API Routes
 app.use('/api/auth', authRoutes);
+app.use('/api/user', userRoutes);
 
 // Define a redirect map for specific routes
 const redirectMap = {
