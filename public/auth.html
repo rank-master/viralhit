@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign Up & Login</title>
+    <title>Sign Up & Login - ViralHit</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <style>
         /* General Styles */
         * {
@@ -69,10 +70,18 @@
             display: block;
         }
 
+        form label {
+            display: block;
+            text-align: left;
+            font-size: 0.9rem;
+            margin: 0.5rem 0 0.2rem;
+            color: #5d5d5d;
+        }
+
         form input {
             width: 100%;
             padding: 0.75rem;
-            margin: 0.5rem 0;
+            margin-bottom: 0.5rem;
             border: 1px solid #ddd;
             border-radius: 5px;
             font-size: 1rem;
@@ -91,8 +100,31 @@
             transition: background 0.3s ease;
         }
 
-        form button:hover {
+        form button:hover:not(.disabled) {
             background: #ff5c38;
+        }
+
+        form button.disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .notification {
+            padding: 0.75rem;
+            margin-top: 1rem;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            display: none;
+        }
+
+        .notification.success {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .notification.error {
+            background: #f8d7da;
+            color: #721c24;
         }
 
         .message {
@@ -117,6 +149,9 @@
     <div class="container">
         <h2>Welcome to ViralHit</h2>
 
+        <!-- Notification Area -->
+        <div class="notification" id="notification"></div>
+
         <!-- Toggle Buttons -->
         <div class="toggle-buttons">
             <button id="signup-btn" class="active">Sign Up</button>
@@ -126,9 +161,12 @@
         <!-- Sign Up Form -->
         <form id="signup-form" class="active">
             <h3>Create an Account</h3>
-            <input type="text" placeholder="Full Name" required />
-            <input type="email" placeholder="Email Address" required />
-            <input type="password" placeholder="Password" required />
+            <label for="signup-name">Full Name</label>
+            <input type="text" id="signup-name" placeholder="Full Name" required />
+            <label for="signup-email">Email Address</label>
+            <input type="email" id="signup-email" placeholder="Email Address" required />
+            <label for="signup-password">Password</label>
+            <input type="password" id="signup-password" placeholder="Password" required />
             <button type="submit">Sign Up</button>
             <div class="message">Already have an account? <a href="#" onclick="switchToLogin()">Login here</a>.</div>
         </form>
@@ -136,8 +174,10 @@
         <!-- Login Form -->
         <form id="login-form">
             <h3>Login to Your Account</h3>
-            <input type="email" placeholder="Email Address" required />
-            <input type="password" placeholder="Password" required />
+            <label for="login-email">Email Address</label>
+            <input type="email" id="login-email" placeholder="Email Address" required />
+            <label for="login-password">Password</label>
+            <input type="password" id="login-password" placeholder="Password" required />
             <button type="submit">Login</button>
             <div class="message">Don't have an account? <a href="#" onclick="switchToSignup()">Sign up here</a>.</div>
         </form>
@@ -150,8 +190,19 @@
         const loginBtn = document.getElementById('login-btn');
         const signupForm = document.getElementById('signup-form');
         const loginForm = document.getElementById('login-form');
+        const notification = document.getElementById('notification');
 
-        // Function to show Sign Up form
+        // Function to show notification
+        function showNotification(message, type) {
+            notification.textContent = message;
+            notification.className = `notification ${type}`;
+            notification.style.display = 'block';
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 3000); // Hide after 3 seconds
+        }
+
+        // Function to switch to Sign Up form
         function switchToSignup() {
             signupForm.classList.add('active');
             loginForm.classList.remove('active');
@@ -159,7 +210,7 @@
             loginBtn.classList.remove('active');
         }
 
-        // Function to show Login form
+        // Function to switch to Login form
         function switchToLogin() {
             loginForm.classList.add('active');
             signupForm.classList.remove('active');
@@ -171,58 +222,89 @@
         signupBtn.addEventListener('click', switchToSignup);
         loginBtn.addEventListener('click', switchToLogin);
 
-        // Prevent default form submission (for demonstration purposes)
-        signupForm.addEventListener('submit', (e) => {
+        // Validation functions
+        function validateEmail(email) {
+            return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+        }
+
+        function validatePassword(password) {
+            return password.length >= 6; // Add more rules as needed
+        }
+
+        // Handle Sign Up submission
+        signupForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-            alert('Sign Up Successful! (Mock Submission)');
+            const button = signupForm.querySelector('button');
+            const name = document.getElementById('signup-name').value;
+            const email = document.getElementById('signup-email').value;
+            const password = document.getElementById('signup-password').value;
+
+            // Client-side validation
+            if (!name) return showNotification('Full name is required', 'error');
+            if (!validateEmail(email)) return showNotification('Invalid email format', 'error');
+            if (!validatePassword(password)) return showNotification('Password must be at least 6 characters', 'error');
+
+            // Loading state
+            button.disabled = true;
+            button.textContent = 'Loading...';
+
+            try {
+                const response = await fetch('/api/signup', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name, email, password }),
+                });
+                const result = await response.json();
+                if (response.ok) {
+                    showNotification(result.message, 'success');
+                    setTimeout(() => window.location.href = '/dashboard', 1000); // Redirect to dashboard
+                } else {
+                    showNotification(result.message, 'error');
+                }
+            } catch (error) {
+                showNotification('Something went wrong. Please try again.', 'error');
+            } finally {
+                button.disabled = false;
+                button.textContent = 'Sign Up';
+            }
         });
 
-        loginForm.addEventListener('submit', (e) => {
+        // Handle Login submission
+        loginForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-            alert('Login Successful! (Mock Submission)');
+            const button = loginForm.querySelector('button');
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+
+            // Client-side validation
+            if (!validateEmail(email)) return showNotification('Invalid email format', 'error');
+            if (!validatePassword(password)) return showNotification('Password must be at least 6 characters', 'error');
+
+            // Loading state
+            button.disabled = true;
+            button.textContent = 'Loading...';
+
+            try {
+                const response = await fetch('/api/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password }),
+                });
+                const result = await response.json();
+                if (response.ok) {
+                    localStorage.setItem('token', result.token);
+                    showNotification(result.message, 'success');
+                    setTimeout(() => window.location.href = '/dashboard', 1000); // Redirect to dashboard
+                } else {
+                    showNotification(result.message, 'error');
+                }
+            } catch (error) {
+                showNotification('Something went wrong. Please try again.', 'error');
+            } finally {
+                button.disabled = false;
+                button.textContent = 'Login';
+            }
         });
-
-        // Function to handle Sign Up
-signupForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const formData = {
-        name: signupForm.querySelector('input[type="text"]').value,
-        email: signupForm.querySelector('input[type="email"]').value,
-        password: signupForm.querySelector('input[type="password"]').value,
-    };
-
-    const response = await fetch('/api/signup', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
-    });
-
-    const result = await response.json();
-    alert(result.message);
-});
-
-// Function to handle Login
-loginForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const formData = {
-        email: loginForm.querySelector('input[type="email"]').value,
-        password: loginForm.querySelector('input[type="password"]').value,
-    };
-
-    const response = await fetch('/api/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
-    });
-
-    const result = await response.json();
-    if (response.ok) {
-        localStorage.setItem('token', result.token); // Save token for future use
-        alert(result.message);
-    } else {
-        alert(result.message);
-    }
-});
     </script>
 </body>
 </html>
