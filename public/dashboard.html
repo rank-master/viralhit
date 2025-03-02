@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ViralHit Dashboard</title>
+    <style>
+        /* General Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', Arial, sans-serif;
+            background: linear-gradient(135deg, #86e3ce, #d3f8e2);
+            color: #333;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+            margin-bottom: 2rem;
+        }
+
+        .logo {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: #ff7a59;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logout-btn {
+            padding: 0.5rem 1rem;
+            background: #ff7a59;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+        }
+
+        .card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            color: #ff7a59;
+            margin-bottom: 1rem;
+        }
+
+        .referral-box {
+            background: #f9f9f9;
+            border: 1px dashed #ddd;
+            padding: 1rem;
+            border-radius: 5px;
+            margin-bottom: 1rem;
+        }
+
+        .copy-btn {
+            padding: 0.5rem 1rem;
+            background: #ffdf7c;
+            color: #333;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 0.5rem;
+        }
+
+        .courses-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .course-card {
+            background: #f9f9f9;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .course-image {
+            height: 150px;
+            background: #ddd;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .course-details {
+            padding: 1rem;
+        }
+
+        .course-title {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .course-price {
+            color: #ff7a59;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .buy-btn {
+            display: block;
+            width: 100%;
+            padding: 0.75rem;
+            background: #ff7a59;
+            color: white;
+            text-align: center;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .balance {
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+        }
+
+        .balance-amount {
+            font-weight: 700;
+            color: #ff7a59;
+        }
+
+        .withdraw-btn {
+            padding: 0.5rem 1rem;
+            background: #ff7a59;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">ViralHit</div>
+            <div class="user-info">
+                <span id="user-name">Loading...</span>
+                <button class="logout-btn" id="logout-btn">Logout</button>
+            </div>
+        </header>
+
+        <div class="card">
+            <h3 class="card-title">Your Referral Link</h3>
+            <p>Share this link with your friends and earn 80% commission when they purchase courses!</p>
+            <div class="referral-box">
+                <input type="text" id="referral-link" readonly style="width: 100%; padding: 0.5rem;">
+                <button class="copy-btn" id="copy-btn">Copy Link</button>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3 class="card-title">Your Balance</h3>
+            <div class="balance">Current Balance: <span class="balance-amount" id="user-balance">₹0.00</span></div>
+            <button class="withdraw-btn" id="withdraw-btn">Request Withdrawal</button>
+        </div>
+
+        <div class="card">
+            <h3 class="card-title">Available Courses</h3>
+            <div class="courses-grid" id="courses-container">
+                <!-- Courses will be loaded here -->
+                <div class="course-card">
+                    <div class="course-image">Course Image</div>
+                    <div class="course-details">
+                        <h4 class="course-title">Digital Marketing Masterclass</h4>
+                        <div class="course-price">₹499</div>
+                        <a href="#" class="buy-btn" data-course-id="1">Buy Now</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Check if user is logged in
+        document.addEventListener('DOMContentLoaded', function() {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                window.location.href = '/auth.html';
+                return;
+            }
+
+            // Load user data
+            const user = JSON.parse(localStorage.getItem('user'));
+            if (user) {
+                document.getElementById('user-name').textContent = user.name;
+                document.getElementById('user-balance').textContent = `₹${user.balance.toFixed(2)}`;
+                
+                // Generate referral link
+                const referralLink = `${window.location.origin}/auth.html?ref=${user.referralCode}`;
+                document.getElementById('referral-link').value = referralLink;
+            }
+
+            // Copy referral link button
+            document.getElementById('copy-btn').addEventListener('click', function() {
+                const referralInput = document.getElementById('referral-link');
+                referralInput.select();
+                document.execCommand('copy');
+                this.textContent = 'Copied!';
+                setTimeout(() => {
+                    this.textContent = 'Copy Link';
+                }, 2000);
+            });
+
+            // Logout button
+            document.getElementById('logout-btn').addEventListener('click', function() {
+                localStorage.removeItem('token');
+                localStorage.removeItem('user');
+                window.location.href = '/auth.html';
+            });
+
+            // Load courses - in a real app, this would fetch from your API
+            // loadCourses();
+
+            // Handle buy now button clicks
+            document.addEventListener('click', function(e) {
+                if (e.target.classList.contains('buy-btn')) {
+                    e.preventDefault();
+                    const courseId = e.target.getAttribute('data-course-id');
+                    // Replace with your WhatsApp number
+                    const whatsappNumber = '919876543210';
+                    const message = `Hi, I want to buy course #${courseId}. My referral code is: ${user.referralCode}`;
+                    const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
+                    window.open(whatsappUrl, '_blank');
+                }
+            });
+
+            // Withdraw button
+            document.getElementById('withdraw-btn').addEventListener('click', function() {
+                // Replace with your WhatsApp number
+                const whatsappNumber = '919876543210';
+                const message = `Hi, I would like to withdraw my earnings. My referral code is: ${user.referralCode}`;
+                const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
+                window.open(whatsappUrl, '_blank');
+            });
+        });
+
+        // Function to load courses from API (to be implemented)
+        async function loadCourses() {
+            try {
+                const response = await fetch('/api/courses', {
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    }
+                });
+                const data = await response.json();
+                
+                if (response.ok) {
+                    const coursesContainer = document.getElementById('courses-container');
+                    coursesContainer.innerHTML = '';
+                    
+                    data.courses.forEach(course => {
+                        coursesContainer.innerHTML += `
+                            <div class="course-card">
+                                <div class="course-image">${course.title.charAt(0)}</div>
+                                <div class="course-details">
+                                    <h4 class="course-title">${course.title}</h4>
+                                    <div class="course-price">₹${course.price}</div>
+                                    <a href="#" class="buy-btn" data-course-id="${course._id}">Buy Now</a>
+                                </div>
+                            </div>
+                        `;
+                    });
+                }
+            } catch (error) {
+                console.error('Error loading courses:', error);
+            }
+        }
+    </script>
+</body>
+</html>
