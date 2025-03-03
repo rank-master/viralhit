@@ -24,13 +24,12 @@ app.use(express.static(path.join(__dirname, './public')));
 app.use('/api/auth', authRoutes);
 app.use('/api/user', userRoutes);
 
-// Define a redirect map for specific routes
+// Define a redirect map for specific routes (excluding dashboard)
 const redirectMap = {
   '/auth': '/auth.html',
   '/bronze-package': '/bronze-package.html',
   '/gold-package': '/gold-package.html',
-  '/diamond-package': '/diamond-package.html',
-  '/dashboard': '/dashboard.html'
+  '/diamond-package': '/diamond-package.html'
 };
 
 // Fallback Route for Unmatched Paths

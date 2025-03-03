@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>9ties - User Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/dashboard.css">
+</head>
+<body>
+  <!-- Sidebar Navigation -->
+  <aside class="sidebar">
+    <div class="logo">9<span>ties</span></div>
+    <nav class="sidebar-nav">
+      <ul>
+        <li class="active">
+          <a href="#dashboard" data-page="dashboard">
+            <i class="fas fa-home"></i>
+            <span>Dashboard</span>
+          </a>
+        </li>
+        <li>
+          <a href="#earnings" data-page="earnings">
+            <i class="fas fa-wallet"></i>
+            <span>Earnings</span>
+          </a>
+        </li>
+        <li>
+          <a href="#referrals" data-page="referrals">
+            <i class="fas fa-user-friends"></i>
+            <span>Referrals</span>
+          </a>
+        </li>
+        <li>
+          <a href="#settings" data-page="settings">
+            <i class="fas fa-cog"></i>
+            <span>Settings</span>
+          </a>
+        </li>
+        <li>
+          <a href="#profile" data-page="profile">
+            <i class="fas fa-user"></i>
+            <span>Profile</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+    <div class="sidebar-footer">
+      <a href="#" id="logout-button">
+        <i class="fas fa-sign-out-alt"></i>
+        <span>Logout</span>
+      </a>
+    </div>
+  </aside>
+
+  <!-- Main Content Area -->
+  <main class="main-content">
+    <!-- Top Bar -->
+    <header class="top-bar">
+      <button id="sidebar-toggle">
+        <i class="fas fa-bars"></i>
+      </button>
+      <div class="user-info">
+        <div class="user-name" id="user-name">Loading...</div>
+        <div class="user-avatar">
+          <img src="https://via.placeholder.com/40" alt="User Avatar" id="user-avatar">
+        </div>
+      </div>
+    </header>
+
+    <!-- Dashboard Page -->
+    <section class="page active" id="dashboard-page">
+      <h1>Dashboard</h1>
+      
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon">
+            <i class="fas fa-wallet"></i>
+          </div>
+          <div class="stat-content">
+            <h3>Total Earnings</h3>
+            <div class="stat-value">₹<span id="total-earnings">0.00</span></div>
+          </div>
+        </div>
+        
+        <div class="stat-card">
+          <div class="stat-icon">
+            <i class="fas fa-user-friends"></i>
+          </div>
+          <div class="stat-content">
+            <h3>Total Referrals</h3>
+            <div class="stat-value"><span id="total-referrals">0</span></div>
+          </div>
+        </div>
+        
+        <div class="stat-card">
+          <div class="stat-icon">
+            <i class="fas fa-chart-line"></i>
+          </div>
+          <div class="stat-content">
+            <h3>This Month</h3>
+            <div class="stat-value">₹<span id="month-earnings">0.00</span></div>
+          </div>
+        </div>
+        
+        <div class="stat-card">
+          <div class="stat-icon">
+            <i class="fas fa-users"></i>
+          </div>
+          <div class="stat-content">
+            <h3>Network Size</h3>
+            <div class="stat-value"><span id="network-size">0</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="dashboard-sections">
+        <div class="dashboard-section">
+          <h2>Quick Share</h2>
+          <div class="referral-link-container">
+            <p>Share your referral link to start earning!</p>
+            <div class="input-group">
+              <input type="text" id="referral-link" value="Loading..." readonly>
+              <button id="copy-link" class="btn-primary">
+                <i class="fas fa-copy"></i> Copy
+              </button>
+            </div>
+            <div class="share-buttons">
+              <button class="share-button whatsapp">
+                <i class="fab fa-whatsapp"></i>
+              </button>
+              <button class="share-button facebook">
+                <i class="fab fa-facebook-f"></i>
+              </button>
+              <button class="share-button twitter">
+                <i class="fab fa-twitter"></i>
+              </button>
+              <button class="share-button instagram">
+                <i class="fab fa-instagram"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+        
+        <div class="dashboard-section">
+          <h2>Recent Activity</h2>
+          <div class="activity-feed" id="activity-feed">
+            <div class="activity-item">
+              <div class="activity-icon">
+                <i class="fas fa-user-plus"></i>
+              </div>
+              <div class="activity-content">
+                <p>Rahul M. joined using your referral link</p>
+                <span class="activity-time">2 days ago</span>
+              </div>
+            </div>
+            <div class="activity-item">
+              <div class="activity-icon">
+                <i class="fas fa-coins"></i>
+              </div>
+              <div class="activity-content">
+                <p>Commission earned: ₹80 from Priya S.</p>
+                <span class="activity-time">4 days ago</span>
+              </div>
+            </div>
+            <div class="activity-item">
+              <div class="activity-icon">
+                <i class="fas fa-level-up-alt"></i>
+              </div>
+              <div class="activity-content">
+                <p>Indirect commission: ₹20 from Anjali K.</p>
+                <span class="activity-time">1 week ago</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Earnings Page -->
+    <section class="page" id="earnings-page">
+      <h1>Your Earnings</h1>
+      
+      <div class="earnings-header">
+        <div class="balance-card">
+          <h2>Available Balance</h2>
+          <div class="balance-amount">₹<span id="available-balance">0.00</span></div>
+          <button class="btn-primary" id="withdraw-button">Request Withdrawal</button>
+        </div>
+        
+        <div class="earnings-filters">
+          <select id="earnings-period">
+            <option value="all">All Time</option>
+            <option value="month">This Month</option>
+            <option value="week">This Week</option>
+          </select>
+        </div>
+      </div>
+      
+      <div class="earnings-breakdown">
+        <div class="earnings-card">
+          <h3>Direct Commissions</h3>
+          <div class="earnings-value">₹<span id="direct-commissions">0.00</span></div>
+        </div>
+        <div class="earnings-card">
+          <h3>Indirect Commissions</h3>
+          <div class="earnings-value">₹<span id="indirect-commissions">0.00</span></div>
+        </div>
+        <div class="earnings-card">
+          <h3>Super Passive</h3>
+          <div class="earnings-value">₹<span id="super-passive">0.00</span></div>
+        </div>
+      </div>
+      
+      <div class="transactions-section">
+        <h2>Transaction History</h2>
+        <div class="transactions-table-container">
+          <table class="transactions-table">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Description</th>
+                <th>Type</th>
+                <th>Amount</th>
+              </tr>
+            </thead>
+            <tbody id="transactions-body">
+              <tr>
+                <td>2024-02-15</td>
+                <td>Commission from Rahul M.</td>
+                <td>Direct</td>
+                <td class="amount-positive">+₹80.00</td>
+              </tr>
+              <tr>
+                <td>2024-02-10</td>
+                <td>Commission from Priya S. (Level 2)</td>
+                <td>Indirect</td>
+                <td class="amount-positive">+₹20.00</td>
+              </tr>
+              <tr>
+                <td>2024-02-05</td>
+                <td>Withdrawal to UPI</td>
+                <td>Withdrawal</td>
+                <td class="amount-negative">-₹100.00</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- Referrals Page -->
+    <section class="page" id="referrals-page">
+      <h1>Your Referral Network</h1>
+      
+      <div class="referral-stats">
+        <div class="stat-card">
+          <div class="stat-icon">
+            <i class="fas fa-user-plus"></i>
+          </div>
+          <div class="stat-content">
+            <h3>Direct Referrals</h3>
+            <div class="stat-value"><span id="direct-referrals">0</span></div>
+          </div>
+        </div>
+        
+        <div class="stat-card">
+          <div class="stat-icon">
+            <i class="fas fa-sitemap"></i>
+          </div>
+          <div class="stat-content">
+            <h3>Indirect Referrals</h3>
+            <div class="stat-value"><span id="indirect-referrals">0</span></div>
+          </div>
+        </div>
+        
+        <div class="stat-card">
+          <div class="stat-icon">
+            <i class="fas fa-chart-pie"></i>
+          </div>
+          <div class="stat-content">
+            <h3>Conversion Rate</h3>
+            <div class="stat-value"><span id="conversion-rate">0</span>%</div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="referral-network">
+        <h2>Your Direct Referrals</h2>
+        <div class="referrals-table-container">
+          <table class="referrals-table">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Joined</th>
+                <th>Package</th>
+                <th>Their Referrals</th>
+                <th>Earnings Generated</th>
+              </tr>
+            </thead>
+            <tbody id="direct-referrals-body">
+              <tr class="expandable-row" data-id="1">
+                <td>Rahul M.</td>
+                <td>Feb 15, 2024</td>
+                <td>Gold</td>
+                <td>3</td>
+                <td>₹240.00</td>
+              </tr>
+              <tr class="expanded-content" data-parent="1">
+                <td colspan="5">
+                  <div class="nested-referrals">
+                    <h4>Rahul's Referrals:</h4>
+                    <table>
+                      <thead>
+                        <tr>
+                          <th>Name</th>
+                          <th>Joined</th>
+                          <th>Package</th>
+                          <th>Earnings For You</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>Neha K.</td>
+                          <td>Feb 20, 2024</td>
+                          <td>Bronze</td>
+                          <td>₹10.00</td>
+                        </tr>
+                        <tr>
+                          <td>Arjun S.</td>
+                          <td>Feb 22, 2024</td>
+                          <td>Gold</td>
+                          <td>₹20.00</td>
+                        </tr>
+                        <tr>
+                          <td>Meera P.</td>
+                          <td>Feb 25, 2024</td>
+                          <td>Diamond</td>
+                          <td>₹30.00</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </td>
+              </tr>
+              <tr class="expandable-row" data-id="2">
+                <td>Priya S.</td>
+                <td>Feb 10, 2024</td>
+                <td>Diamond</td>
+                <td>2</td>
+                <td>₹180.00</td>
+              </tr>
+              <tr class="expanded-content" data-parent="2">
+                <td colspan="5">
+                  <div class="nested-referrals">
+                    <h4>Priya's Referrals:</h4>
+                    <table>
+                      <thead>
+                        <tr>
+                          <th>Name</th>
+                          <th>Joined</th>
+                          <th>Package</th>
+                          <th>Earnings For You</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>Vijay R.</td>
+                          <td>Feb 15, 2024</td>
+                          <td>Bronze</td>
+                          <td>₹10.00</td>
+                        </tr>
+                        <tr>
+                          <td>Sonia T.</td>
+                          <td>Feb 18, 2024</td>
+                          <td>Gold</td>
+                          <td>₹20.00</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- Settings Page -->
+    <section class="page" id="settings-page">
+      <h1>Commission Settings</h1>
+      
+      <div class="settings-card">
+        <h2>Referral Commission Rates</h2>
+        <p>Customize how much commission your referrals earn. Reducing your rates increases their earning potential.</p>
+        
+        <div class="commission-settings">
+          <div class="setting-group">
+            <h3>First-Time Sales Commission</h3>
+            <div class="commission-sliders">
+              <div class="slider-container">
+                <label>Your Commission (Max: 80%)</label>
+                <div class="slider-input-group">
+                  <input type="range" min="50" max="80" value="80" id="first-sale-commission">
+                  <div class="slider-value"><span id="first-sale-value">80</span>%</div>
+                </div>
+              </div>
+              <div class="commission-result">
+                <p>Your Referral Gets: <span id="first-sale-referral">10</span>%</p>
+                <p>Super Passive: <span id="first-sale-passive">5</span>%</p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="setting-group">
+            <h3>Subsequent Sales Commission</h3>
+            <div class="commission-sliders">
+              <div class="slider-container">
+                <label>Your Commission (Max: 60%)</label>
+                <div class="slider-input-group">
+                  <input type="range" min="40" max="60" value="60" id="subsequent-sale-commission">
+                  <div class="slider-value"><span id="subsequent-sale-value">60</span>%</div>
+                </div>
+              </div>
+              <div class="commission-result">
+                <p>Your Referral Gets: <span id="subsequent-sale-referral">20</span>%</p>
+                <p>Super Passive: <span id="subsequent-sale-passive">10</span>%</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <button class="btn-primary" id="save-commission-settings">Save Settings</button>
+      </div>
+      
+      <div class="settings-card">
+        <h2>Payment Settings</h2>
+        <div class="payment-methods">
+          <h3>Withdrawal Method</h3>
+          <div class="payment-options">
+            <div class="payment-option active">
+              <input type="radio" id="upi" name="payment-method" checked>
+              <label for="upi">UPI</label>
+            </div>
+            <div class="payment-option">
+              <input type="radio" id="bank" name="payment-method">
+              <label for="bank">Bank Transfer</label>
+            </div>
+          </div>
+          
+          <div class="payment-details" id="upi-details">
+            <div class="form-group">
+              <label for="upi-id">UPI ID</label>
+              <input type="text" id="upi-id" placeholder="yourname@upi">
+            </div>
+          </div>
+          
+          <div class="payment-details" id="bank-details" style="display: none;">
+            <div class="form-group">
+              <label for="account-name">Account Holder Name</label>
+              <input type="text" id="account-name">
+            </div>
+            <div class="form-group">
+              <label for="account-number">Account Number</label>
+              <input type="text" id="account-number">
+            </div>
+            <div class="form-group">
+              <label for="ifsc-code">IFSC Code</label>
+              <input type="text" id="ifsc-code">
+            </div>
+          </div>
+          
+          <button class="btn-primary" id="save-payment-settings">Save Payment Info</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Profile Page -->
+    <section class="page" id="profile-page">
+      <h1>Profile</h1>
+      
+      <div class="profile-content">
+        <div class="profile-card">
+          <div class="profile-header">
+            <div class="profile-avatar">
+              <img src="https://via.placeholder.com/100" alt="Profile Avatar" id="profile-avatar">
+              <div class="avatar-overlay">
+                <i class="fas fa-camera"></i>
+              </div>
+            </div>
+            <h2 id="profile-name">Loading...</h2>
+            <p id="profile-email">Loading...</p>
+          </div>
+          
+          <div class="profile-form">
+            <div class="form-group">
+              <label for="profile-name-input">Full Name</label>
+              <input type="text" id="profile-name-input">
+            </div>
+            <div class="form-group">
+              <label for="profile-email-input">Email</label>
+              <input type="email" id="profile-email-input" disabled>
+            </div>
+            <div class="form-group">
+              <label for="profile-phone">Phone Number</label>
+              <input type="tel" id="profile-phone">
+            </div>
+            
+            <button class="btn-primary" id="save-profile">Save Changes</button>
+          </div>
+        </div>
+        
+        <div class="profile-card">
+          <h2>Change Password</h2>
+          <div class="password-form">
+            <div class="form-group">
+              <label for="current-password">Current Password</label>
+              <input type="password" id="current-password">
+            </div>
+            <div class="form-group">
+              <label for="new-password">New Password</label>
+              <input type="password" id="new-password">
+            </div>
+            <div class="form-group">
+              <label for="confirm-password">Confirm New Password</label>
+              <input type="password" id="confirm-password">
+            </div>
+            
+            <button class="btn-primary" id="change-password">Update Password</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Modal for Withdrawal -->
+  <div class="modal" id="withdrawal-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Request Withdrawal</h2>
+        <button class="modal-close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p>Available Balance: ₹<span id="modal-balance">0.00</span></p>
+        <div class="form-group">
+          <label for="withdrawal-amount">Amount to Withdraw</label>
+          <input type="number" id="withdrawal-amount" min="100" step="1">
+        </div>
+        <div class="withdrawal-method">
+          <p>Withdraw to: <span id="withdrawal-method-display">UPI: yourname@upi</span></p>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary modal-close-btn">Cancel</button>
+        <button class="btn-primary" id="confirm-withdrawal">Confirm</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="/dashboard.js"></script>
+</body>
+</html>

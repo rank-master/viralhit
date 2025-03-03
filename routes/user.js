@@ -1,7 +1,9 @@
 const express = require('express');
 const User = require('../models/User'); // Import the User model
+const { protect } = require('../middleware/auth');
 const Course = require('../models/Course'); // Import the Course model
 const router = express.Router();
+const path = require('path');
 
 // Dashboard API endpoint
 router.get('/api/user/dashboard', async (req, res) => {
@@ -22,6 +24,11 @@ router.get('/api/user/dashboard', async (req, res) => {
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
+});
+
+// Protected dashboard route
+router.get('/dashboard', protect, (req, res) => {
+  res.sendFile(path.join(__dirname, '../../views/dashboard.html'));
 });
 
 module.exports = router;
