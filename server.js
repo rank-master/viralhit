@@ -23,9 +23,21 @@ app.get('/dashboard', protect, (req, res) => {
   res.sendFile(path.join(__dirname, './views/dashboard.html'));
 });
 
-// Fallback for unmatched routes
+// Server-side redirect map
+const redirectMap = {
+  '/bronze-package': '/bronze-package.html',
+  '/gold-package': '/gold-package.html',
+  '/diamond-package': '/diamond-package.html',
+  '/auth': '/auth.html'
+};
+
 app.get('*', (req, res) => {
-  res.status(404).sendFile(path.join(__dirname, './public/404.html'));
+  const redirectPath = redirectMap[req.path];
+  if (redirectPath) {
+    res.redirect(301, redirectPath); // Server-side redirect
+  } else {
+    res.status(404).sendFile(path.join(__dirname, './public/404.html'));
+  }
 });
 
 mongoose.connect(process.env.MONGO_URI)
