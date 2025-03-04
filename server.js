@@ -37,12 +37,7 @@ const redirectMap = {
 };
 
 app.get('*', (req, res) => {
-  const redirectPath = redirectMap[req.path];
-  if (redirectPath) {
-    res.redirect(301, redirectPath); // Server-side redirect
-  } else {
-    res.status(404).sendFile(path.join(__dirname, './public/404.html'));
-  }
+  res.sendFile(path.join(__dirname, './public/index.html'));
 });
 
 mongoose.connect(process.env.MONGO_URI)
