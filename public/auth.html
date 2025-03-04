@@ -126,20 +126,13 @@
     </style>
 </head>
 <body>
-    <!-- Container -->
     <div class="container">
         <h2>Welcome to 9ties</h2>
-
-        <!-- Notification Area -->
         <div class="notification" id="notification"></div>
-
-        <!-- Toggle Buttons -->
         <div class="toggle-buttons">
             <button id="signup-btn" class="active">Sign Up</button>
             <button id="login-btn">Login</button>
         </div>
-
-        <!-- Sign Up Form -->
         <form id="signup-form" class="active">
             <h3>Create an Account</h3>
             <label for="signup-name">Full Name</label>
@@ -151,8 +144,6 @@
             <button type="submit">Sign Up</button>
             <div class="message">Already have an account? <a href="#" onclick="switchToLogin()">Login here</a>.</div>
         </form>
-
-        <!-- Login Form -->
         <form id="login-form">
             <h3>Login to Your Account</h3>
             <label for="login-email">Email Address</label>
@@ -164,26 +155,43 @@
         </form>
     </div>
 
-    <!-- JavaScript -->
     <script>
-       // Get references to elements
+        // Check token validity before redirecting
+        const token = localStorage.getItem('token');
+        if (token) {
+            fetch('/api/user/me', {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => {
+                if (response.ok) {
+                    window.location.href = '/dashboard'; // Valid token, redirect
+                } else {
+                    localStorage.removeItem('token'); // Invalid token, clear it
+                }
+            })
+            .catch(() => {
+                localStorage.removeItem('token'); // Error (e.g., network), clear token
+            });
+        }
+
+        // Rest of your existing JavaScript
         const signupBtn = document.getElementById('signup-btn');
         const loginBtn = document.getElementById('login-btn');
         const signupForm = document.getElementById('signup-form');
         const loginForm = document.getElementById('login-form');
         const notification = document.getElementById('notification');
 
-        // Function to show notification
         function showNotification(message, type) {
             notification.textContent = message;
             notification.className = `notification ${type}`;
             notification.style.display = 'block';
-            setTimeout(() => {
-                notification.style.display = 'none';
-            }, 3000);
+            setTimeout(() => notification.style.display = 'none', 3000);
         }
 
-        // Function to switch to Sign Up form
         function switchToSignup() {
             signupForm.classList.add('active');
             loginForm.classList.remove('active');
@@ -191,7 +199,6 @@
             loginBtn.classList.remove('active');
         }
 
-        // Function to switch to Login form
         function switchToLogin() {
             loginForm.classList.add('active');
             signupForm.classList.remove('active');
@@ -199,11 +206,9 @@
             signupBtn.classList.remove('active');
         }
 
-        // Event listeners for toggle buttons
         signupBtn.addEventListener('click', switchToSignup);
         loginBtn.addEventListener('click', switchToLogin);
 
-        // Validation functions
         function validateEmail(email) {
             return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
         }
@@ -212,7 +217,6 @@
             return password.length >= 6;
         }
 
-        // Handle Sign Up submission
         signupForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             const button = signupForm.querySelector('button');
@@ -237,7 +241,7 @@
                 if (response.ok) {
                     localStorage.setItem('token', result.token);
                     showNotification(result.message || 'Signup successful!', 'success');
-                    setTimeout(() => window.location.href = '/dashboard', 1000); // Updated redirect
+                    setTimeout(() => window.location.href = '/dashboard', 1000);
                 } else {
                     showNotification(result.message || 'Signup failed', 'error');
                 }
@@ -249,7 +253,6 @@
             }
         });
 
-        // Handle Login submission
         loginForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             const button = loginForm.querySelector('button');
@@ -272,7 +275,7 @@
                 if (response.ok) {
                     localStorage.setItem('token', result.token);
                     showNotification(result.message || 'Login successful!', 'success');
-                    setTimeout(() => window.location.href = '/dashboard', 1000); // Updated redirect
+                    setTimeout(() => window.location.href = '/dashboard', 1000);
                 } else {
                     showNotification(result.message || 'Login failed', 'error');
                 }
