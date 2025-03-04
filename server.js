@@ -1,55 +1,42 @@
 const express = require('express');
-const cors = require('cors');
-const mongoose = require('mongoose');
-require('dotenv').config();
-const path = require('path');
+const User = require('../models/User');
+const { protect } = require('../middleware/auth');
+const Course = require('../models/Course');
+const router = express.Router();
 
-// Route imports
-const authRoutes = require('./routes/auth');
-const userRoutes = require('./routes/user');
+router.get('/dashboard', protect, async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const user = await User.findById(userId);
+    const courses = await Course.find();
 
-// Initialize app
-const app = express();
-const PORT = process.env.PORT || 5000;
-
-// Middleware
-app.use(cors());
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-
-// Serve static files from the "public" folder
-app.use(express.static(path.join(__dirname, './public')));
-
-// API Routes
-app.use('/api/auth', authRoutes);
-app.use('/api/user', userRoutes);
-
-// Define a redirect map for specific routes (excluding dashboard)
-const redirectMap = {
-  '/auth': '/auth.html',
-  '/bronze-package': '/bronze-package.html',
-  '/gold-package': '/gold-package.html',
-  '/diamond-package': '/diamond-package.html'
-};
-
-// Fallback Route for Unmatched Paths
-app.get('*', (req, res) => {
-  if (redirectMap[req.path]) {
-    // Redirect to the corresponding .html file
-    res.redirect(301, redirectMap[req.path]); // 301 = Permanent Redirect
-  } else {
-    // Serve the custom 404 page
-    res.status(404).sendFile(path.join(__dirname, './public', '404.html'));
+    // Example: Add more user data - adjust based on your User model
+    res.json({
+      name: user.name,
+      email: user.email,
+      phone: user.phone || '',
+      referralLink: user.referralLink,
+      balance: user.balance || 0, // Available balance
+      totalEarnings: user.totalEarnings || user.balance || 0, // Total earned over time
+      totalReferrals: user.totalReferrals || 0, // Total direct + indirect
+      monthEarnings: user.monthEarnings || 0, // Earnings this month
+      networkSize: user.networkSize || 0, // Total downstream users
+      directCommissions: user.directCommissions || 0,
+      indirectCommissions: user.indirectCommissions || 0,
+      superPassive: user.superPassive || 0,
+      directReferrals: user.directReferrals || 0, // Direct referral count
+      indirectReferrals: user.indirectReferrals || 0, // Indirect referral count
+      conversionRate: user.conversionRate || 0, // Percentage
+      directReferralsList: user.directReferralsList || [], // Array of referral details
+      courses: courses.map(course => ({
+        name: course.name,
+        price: course.price,
+        image: course.image
+      }))
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
   }
 });
 
-// Connect to MongoDB
-mongoose.connect(process.env.MONGO_URI)
-  .then(() => {
-    console.log('MongoDB Connected');
-    app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-  })
-  .catch(err => {
-    console.error('Database connection error:', err);
-    process.exit(1);
-  });
+module.exports = router;
