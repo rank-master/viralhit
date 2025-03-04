@@ -6,13 +6,12 @@
     <title>Sign Up & Login - 9ties</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <style>
-        /* General Styles */
+        /* General Styles (unchanged) */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-
         body {
             font-family: 'Poppins', Arial, sans-serif;
             background: linear-gradient(135deg, #86e3ce, #d3f8e2);
@@ -22,7 +21,6 @@
             align-items: center;
             height: 100vh;
         }
-
         .container {
             background: #fff;
             padding: 2rem;
@@ -32,20 +30,17 @@
             max-width: 400px;
             text-align: center;
         }
-
         h2 {
             margin-bottom: 1.5rem;
             font-size: 1.75rem;
             color: #ff7a59;
         }
-
         .toggle-buttons {
             display: flex;
             justify-content: center;
             gap: 1rem;
             margin-bottom: 1.5rem;
         }
-
         .toggle-buttons button {
             padding: 0.5rem 1rem;
             border: none;
@@ -56,20 +51,16 @@
             cursor: pointer;
             transition: background 0.3s ease;
         }
-
         .toggle-buttons button.active {
             background: #ff7a59;
             color: #fff;
         }
-
         form {
             display: none;
         }
-
         form.active {
             display: block;
         }
-
         form label {
             display: block;
             text-align: left;
@@ -77,7 +68,6 @@
             margin: 0.5rem 0 0.2rem;
             color: #5d5d5d;
         }
-
         form input {
             width: 100%;
             padding: 0.75rem;
@@ -86,7 +76,6 @@
             border-radius: 5px;
             font-size: 1rem;
         }
-
         form button {
             width: 100%;
             padding: 0.75rem;
@@ -99,16 +88,13 @@
             cursor: pointer;
             transition: background 0.3s ease;
         }
-
         form button:hover:not(.disabled) {
             background: #ff5c38;
         }
-
         form button.disabled {
             background: #ccc;
             cursor: not-allowed;
         }
-
         .notification {
             padding: 0.75rem;
             margin-top: 1rem;
@@ -116,29 +102,24 @@
             font-size: 0.9rem;
             display: none;
         }
-
         .notification.success {
             background: #d4edda;
             color: #155724;
         }
-
         .notification.error {
             background: #f8d7da;
             color: #721c24;
         }
-
         .message {
             margin-top: 1rem;
             font-size: 0.9rem;
             color: #5d5d5d;
         }
-
         .message a {
             color: #ff7a59;
             text-decoration: none;
             font-weight: 600;
         }
-
         .message a:hover {
             text-decoration: underline;
         }
@@ -185,6 +166,11 @@
 
     <!-- JavaScript -->
     <script>
+        // Check if already logged in
+        if (localStorage.getItem('token')) {
+            window.location.href = '/dashboard';
+        }
+
         // Get references to elements
         const signupBtn = document.getElementById('signup-btn');
         const loginBtn = document.getElementById('login-btn');
@@ -199,7 +185,7 @@
             notification.style.display = 'block';
             setTimeout(() => {
                 notification.style.display = 'none';
-            }, 3000); // Hide after 3 seconds
+            }, 3000);
         }
 
         // Function to switch to Sign Up form
@@ -228,7 +214,7 @@
         }
 
         function validatePassword(password) {
-            return password.length >= 6; // Add more rules as needed
+            return password.length >= 6;
         }
 
         // Handle Sign Up submission
@@ -239,12 +225,10 @@
             const email = document.getElementById('signup-email').value;
             const password = document.getElementById('signup-password').value;
 
-            // Client-side validation
             if (!name) return showNotification('Full name is required', 'error');
             if (!validateEmail(email)) return showNotification('Invalid email format', 'error');
             if (!validatePassword(password)) return showNotification('Password must be at least 6 characters', 'error');
 
-            // Loading state
             button.disabled = true;
             button.textContent = 'Loading...';
 
@@ -257,10 +241,10 @@
                 const result = await response.json();
                 if (response.ok) {
                     localStorage.setItem('token', result.token);
-                    showNotification(result.message, 'success');
-                    setTimeout(() => window.location.href = '/dashboard', 1000); // Redirect to dashboard
+                    showNotification(result.message || 'Signup successful!', 'success');
+                    setTimeout(() => window.location.href = '/dashboard', 1000); // Updated redirect
                 } else {
-                    showNotification(result.message, 'error');
+                    showNotification(result.message || 'Signup failed', 'error');
                 }
             } catch (error) {
                 showNotification('Something went wrong. Please try again.', 'error');
@@ -277,11 +261,9 @@
             const email = document.getElementById('login-email').value;
             const password = document.getElementById('login-password').value;
 
-            // Client-side validation
             if (!validateEmail(email)) return showNotification('Invalid email format', 'error');
             if (!validatePassword(password)) return showNotification('Password must be at least 6 characters', 'error');
 
-            // Loading state
             button.disabled = true;
             button.textContent = 'Loading...';
 
@@ -294,10 +276,10 @@
                 const result = await response.json();
                 if (response.ok) {
                     localStorage.setItem('token', result.token);
-                    showNotification(result.message, 'success');
-                    setTimeout(() => window.location.href = '/dashboard', 1000); // Redirect to dashboard
+                    showNotification(result.message || 'Login successful!', 'success');
+                    setTimeout(() => window.location.href = '/dashboard', 1000); // Updated redirect
                 } else {
-                    showNotification(result.message, 'error');
+                    showNotification(result.message || 'Login failed', 'error');
                 }
             } catch (error) {
                 showNotification('Something went wrong. Please try again.', 'error');
