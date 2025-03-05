@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Redirecting...</title>
+    <script>
+        // Get the requested path
+        const path = window.location.pathname;
+
+        // Redirect to the corresponding .html file
+        const redirectMap = {
+            '/bronze-package': '/bronze-package.html',
+            '/gold-package': '/gold-package.html',
+            '/diamond-package': '/diamond-package.html',
+            '/auth': '/auth.html'
+        };
+
+        if (redirectMap[path]) {
+            window.location.href = redirectMap[path];
+        } else {
+            document.write('<h1>Page Not Found</h1>');
+        }
+    </script>
+</head>
+<body>
+</body>
+</html>

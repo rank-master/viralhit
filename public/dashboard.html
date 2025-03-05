@@ -1,0 +1,1438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>9ties - User Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <style>
+    /* Color Palette */
+:root {
+    --primary-gradient: linear-gradient(135deg, #86e3ce, #d3f8e2);
+    --accent: #ff7a59;
+    --secondary: #5d5d5d;
+    --highlight: #ffdf7c;
+    --light: #ffffff;
+    --dark: #2c2c2c;
+    --shadow: rgba(0, 0, 0, 0.05);
+    --bronze: #cd7f32;
+    --gold: #ffd700;
+    --diamond: #b9f2ff;
+  }
+  
+  /* Base Styles */
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  body {
+    font-family: 'Poppins', sans-serif;
+    line-height: 1.6;
+    background: var(--primary-gradient);
+    color: var(--dark);
+    min-height: 100vh;
+    display: flex;
+  }
+  
+  /* Sidebar */
+  .sidebar {
+    width: 250px;
+    background: var(--light);
+    padding: 2rem 1rem;
+    height: 100vh;
+    position: fixed;
+    box-shadow: 2px 0 10px var(--shadow);
+    transition: transform 0.3s ease;
+    z-index: 1000;
+  }
+  
+  .sidebar .logo {
+    padding: 0 1rem;
+    margin-bottom: 2rem;
+  }
+  
+  .sidebar-nav ul {
+    list-style: none;
+  }
+  
+  .sidebar-nav li {
+    margin: 0.5rem 0;
+  }
+  
+  .sidebar-nav a {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    color: var(--secondary);
+    text-decoration: none;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+  }
+  
+  .sidebar-nav a i {
+    margin-right: 1rem;
+    width: 20px;
+    text-align: center;
+  }
+  
+  .sidebar-nav a:hover,
+  .sidebar-nav .active a {
+    background: var(--highlight);
+    color: var(--dark);
+  }
+  
+  .sidebar-footer {
+    position: absolute;
+    bottom: 1rem;
+    width: calc(100% - 2rem);
+  }
+  
+  .sidebar-footer a {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    color: var(--secondary);
+    text-decoration: none;
+    transition: all 0.3s ease;
+    cursor: pointer;
+  }
+  
+  .sidebar-footer a:hover {
+    color: var(--accent);
+  }
+  
+  /* Main Content */
+  .main-content {
+    margin-left: 250px;
+    flex: 1;
+    padding: 2rem;
+  }
+  
+  .top-bar {
+    background: var(--light);
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px var(--shadow);
+    margin-bottom: 2rem;
+  }
+  
+  #sidebar-toggle {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--secondary);
+  }
+  
+  .user-info {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  
+  .user-avatar img {
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+  }
+  
+  .user-name {
+    font-weight: 600;
+    color: var(--secondary);
+  }
+  
+  /* Page Styles */
+  .page {
+    display: none;
+    background: var(--light);
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px var(--shadow);
+  }
+  
+  .page.active {
+    display: block;
+  }
+  
+  .page h1 {
+    color: var(--secondary);
+    margin-bottom: 2rem;
+  }
+  
+  /* Stats Grid */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+  }
+  
+  .stat-card {
+    background: var(--light);
+    padding: 1.5rem;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px var(--shadow);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  
+  .stat-icon {
+    background: var(--accent);
+    color: var(--light);
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .stat-content h3 {
+    font-size: 1.1rem;
+    color: var(--secondary);
+    margin-bottom: 0.5rem;
+  }
+  
+  .stat-value {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--dark);
+  }
+  
+  /* Dashboard Sections */
+  .dashboard-sections {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+  }
+  
+  .dashboard-section {
+    background: var(--light);
+    padding: 1.5rem;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px var(--shadow);
+  }
+  
+  .dashboard-section h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+  }
+  
+  .referral-link-container p {
+    margin-bottom: 1rem;
+  }
+  
+  .input-group {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+  }
+  
+  .input-group input {
+    flex: 1;
+    padding: 0.75rem;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+  }
+  
+  .btn-primary {
+    background: var(--accent);
+    color: var(--light);
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+  
+  .btn-primary:hover {
+    background: #ff5c38;
+  }
+  
+  .share-buttons {
+    display: flex;
+    gap: 0.5rem;
+  }
+  
+  .share-button {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: none;
+    color: var(--light);
+    cursor: pointer;
+    transition: transform 0.2s ease;
+  }
+  
+  .share-button:hover {
+    transform: scale(1.1);
+  }
+  
+  .whatsapp { background: #25D366; }
+  .facebook { background: #3b5998; }
+  .twitter { background: #1da1f2; }
+  .instagram { background: #e1306c; }
+  
+  /* Activity Feed */
+  .activity-feed {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .activity-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    background: rgba(211, 248, 226, 0.3);
+    border-radius: 8px;
+  }
+  
+  .activity-icon {
+    background: var(--accent);
+    color: var(--light);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .activity-time {
+    color: var(--secondary);
+    font-size: 0.9rem;
+  }
+  
+  /* Earnings Page */
+  .earnings-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+  }
+  
+  .balance-card {
+    background: var(--accent);
+    color: var(--light);
+    padding: 1.5rem;
+    border-radius: 10px;
+    flex: 1;
+    margin-right: 2rem;
+  }
+  
+  .balance-amount {
+    font-size: 2rem;
+    font-weight: 600;
+    margin: 1rem 0;
+  }
+  
+  .earnings-filters select {
+    padding: 0.75rem;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+  }
+  
+  .earnings-breakdown {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+  }
+  
+  .earnings-card {
+    background: var(--light);
+    padding: 1.5rem;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px var(--shadow);
+    text-align: center;
+  }
+  
+  .earnings-value {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--accent);
+    margin-top: 0.5rem;
+  }
+  
+  /* Transactions Table */
+  .transactions-table-container {
+    overflow-x: auto;
+  }
+  
+  .transactions-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .transactions-table th,
+  .transactions-table td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+  }
+  
+  .transactions-table th {
+    background: var(--highlight);
+    color: var(--secondary);
+  }
+  
+  .amount-positive { color: #2ecc71; }
+  .amount-negative { color: #e74c3c; }
+  
+  /* Referrals Page */
+  .referral-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+  }
+  
+  .referrals-table-container {
+    overflow-x: auto;
+  }
+  
+  .referrals-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .referrals-table th,
+  .referrals-table td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+  }
+  
+  .referrals-table th {
+    background: var(--highlight);
+    color: var(--secondary);
+  }
+  
+  .expandable-row {
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+  
+  .expandable-row:hover {
+    background: rgba(211, 248, 226, 0.3);
+  }
+  
+  .expanded-content {
+    display: none;
+  }
+  
+  .expanded-content.active {
+    display: table-row;
+  }
+  
+  .nested-referrals table {
+    width: 100%;
+    margin-top: 1rem;
+  }
+  
+  /* Settings Page */
+  .settings-card {
+    background: var(--light);
+    padding: 1.5rem;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px var(--shadow);
+    margin-bottom: 2rem;
+  }
+  
+  .commission-settings {
+    margin: 1rem 0;
+  }
+  
+  .setting-group {
+    margin-bottom: 2rem;
+  }
+  
+  .commission-sliders {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 2rem;
+  }
+  
+  .slider-container {
+    flex: 1;
+  }
+  
+  .slider-input-group {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  
+  input[type="range"] {
+    width: 100%;
+    cursor: pointer;
+  }
+  
+  .slider-value {
+    font-weight: 600;
+    color: var(--accent);
+  }
+  
+  .commission-result p {
+    margin: 0.5rem 0;
+  }
+  
+  /* Payment Settings */
+  .payment-options {
+    display: flex;
+    gap: 1rem;
+    margin: 1rem 0;
+  }
+  
+  .payment-option {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  .form-group {
+    margin: 1rem 0;
+  }
+  
+  .form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+  }
+  
+  .form-group input {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+  }
+  
+  /* Profile Page */
+  .profile-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+  }
+  
+  .profile-card {
+    background: var(--light);
+    padding: 1.5rem;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px var(--shadow);
+  }
+  
+  .profile-header {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+  
+  .profile-avatar {
+    position: relative;
+    width: 100px;
+    margin: 0 auto;
+    cursor: pointer;
+  }
+  
+  .profile-avatar img {
+    width: 100%;
+    border-radius: 50%;
+  }
+  
+  .avatar-overlay {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    background: var(--accent);
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--light);
+  }
+  
+  /* Modal */
+  .modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+  }
+  
+  .modal.active {
+    display: flex;
+  }
+  
+  .modal-content {
+    background: var(--light);
+    padding: 1.5rem;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 500px;
+  }
+  
+  .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+  
+  .modal-close {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--secondary);
+  }
+  
+  .modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+  
+  .btn-secondary {
+    background: var(--secondary);
+    color: var(--light);
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+  
+  .btn-secondary:hover {
+    background: #444;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .sidebar {
+      transform: translateX(-100%);
+    }
+  
+    .sidebar.active {
+      transform: translateX(0);
+    }
+  
+    .main-content {
+      margin-left: 0;
+    }
+  
+    #sidebar-toggle {
+      display: block;
+    }
+  
+    .dashboard-sections,
+    .profile-content,
+    .earnings-breakdown {
+      grid-template-columns: 1fr;
+    }
+  
+    .earnings-header {
+      flex-direction: column;
+      gap: 1rem;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .stats-grid,
+    .referral-stats {
+      grid-template-columns: 1fr;
+    }
+  
+    .commission-sliders {
+      flex-direction: column;
+    }
+  }
+  </style>
+</head>
+<body>
+  <!-- Sidebar Navigation -->
+  <aside class="sidebar">
+    <div class="logo">9<span>ties</span></div>
+    <nav class="sidebar-nav">
+      <ul>
+        <li class="active">
+          <a href="#dashboard" data-page="dashboard">
+            <i class="fas fa-home"></i>
+            <span>Dashboard</span>
+          </a>
+        </li>
+        <li>
+          <a href="#earnings" data-page="earnings">
+            <i class="fas fa-wallet"></i>
+            <span>Earnings</span>
+          </a>
+        </li>
+        <li>
+          <a href="#referrals" data-page="referrals">
+            <i class="fas fa-user-friends"></i>
+            <span>Referrals</span>
+          </a>
+        </li>
+        <li>
+          <a href="#settings" data-page="settings">
+            <i class="fas fa-cog"></i>
+            <span>Settings</span>
+          </a>
+        </li>
+        <li>
+          <a href="#profile" data-page="profile">
+            <i class="fas fa-user"></i>
+            <span>Profile</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+    <div class="sidebar-footer">
+      <a href="#" id="logout-button">
+        <i class="fas fa-sign-out-alt"></i>
+        <span>Logout</span>
+      </a>
+    </div>
+  </aside>
+
+  <!-- Main Content Area -->
+  <main class="main-content">
+    <!-- Top Bar -->
+    <header class="top-bar">
+      <button id="sidebar-toggle">
+        <i class="fas fa-bars"></i>
+      </button>
+      <div class="user-info">
+        <div class="user-name" id="user-name">Loading...</div>
+        <div class="user-avatar">
+          <img src="https://via.placeholder.com/40" alt="User Avatar" id="user-avatar">
+        </div>
+      </div>
+    </header>
+
+    <!-- Dashboard Page -->
+    <section class="page active" id="dashboard-page">
+      <h1>Dashboard</h1>
+      
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon">
+            <i class="fas fa-wallet"></i>
+          </div>
+          <div class="stat-content">
+            <h3>Total Earnings</h3>
+            <div class="stat-value">₹<span id="total-earnings">0.00</span></div>
+          </div>
+        </div>
+        
+        <div class="stat-card">
+          <div class="stat-icon">
+            <i class="fas fa-user-friends"></i>
+          </div>
+          <div class="stat-content">
+            <h3>Total Referrals</h3>
+            <div class="stat-value"><span id="total-referrals">0</span></div>
+          </div>
+        </div>
+        
+        <div class="stat-card">
+          <div class="stat-icon">
+            <i class="fas fa-chart-line"></i>
+          </div>
+          <div class="stat-content">
+            <h3>This Month</h3>
+            <div class="stat-value">₹<span id="month-earnings">0.00</span></div>
+          </div>
+        </div>
+        
+        <div class="stat-card">
+          <div class="stat-icon">
+            <i class="fas fa-users"></i>
+          </div>
+          <div class="stat-content">
+            <h3>Network Size</h3>
+            <div class="stat-value"><span id="network-size">0</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="dashboard-sections">
+        <div class="dashboard-section">
+          <h2>Quick Share</h2>
+          <div class="referral-link-container">
+            <p>Share your referral link to start earning!</p>
+            <div class="input-group">
+              <input type="text" id="referral-link" value="Loading..." readonly>
+              <button id="copy-link" class="btn-primary">
+                <i class="fas fa-copy"></i> Copy
+              </button>
+            </div>
+            <div class="share-buttons">
+              <button class="share-button whatsapp">
+                <i class="fab fa-whatsapp"></i>
+              </button>
+              <button class="share-button facebook">
+                <i class="fab fa-facebook-f"></i>
+              </button>
+              <button class="share-button twitter">
+                <i class="fab fa-twitter"></i>
+              </button>
+              <button class="share-button instagram">
+                <i class="fab fa-instagram"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+        
+        <div class="dashboard-section">
+          <h2>Recent Activity</h2>
+          <div class="activity-feed" id="activity-feed">
+            <div class="activity-item">
+              <div class="activity-icon">
+                <i class="fas fa-user-plus"></i>
+              </div>
+              <div class="activity-content">
+                <p>Rahul M. joined using your referral link</p>
+                <span class="activity-time">2 days ago</span>
+              </div>
+            </div>
+            <div class="activity-item">
+              <div class="activity-icon">
+                <i class="fas fa-coins"></i>
+              </div>
+              <div class="activity-content">
+                <p>Commission earned: ₹80 from Priya S.</p>
+                <span class="activity-time">4 days ago</span>
+              </div>
+            </div>
+            <div class="activity-item">
+              <div class="activity-icon">
+                <i class="fas fa-level-up-alt"></i>
+              </div>
+              <div class="activity-content">
+                <p>Indirect commission: ₹20 from Anjali K.</p>
+                <span class="activity-time">1 week ago</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Earnings Page -->
+    <section class="page" id="earnings-page">
+      <h1>Your Earnings</h1>
+      
+      <div class="earnings-header">
+        <div class="balance-card">
+          <h2>Available Balance</h2>
+          <div class="balance-amount">₹<span id="available-balance">0.00</span></div>
+          <button class="btn-primary" id="withdraw-button">Request Withdrawal</button>
+        </div>
+        
+        <div class="earnings-filters">
+          <select id="earnings-period">
+            <option value="all">All Time</option>
+            <option value="month">This Month</option>
+            <option value="week">This Week</option>
+          </select>
+        </div>
+      </div>
+      
+      <div class="earnings-breakdown">
+        <div class="earnings-card">
+          <h3>Direct Commissions</h3>
+          <div class="earnings-value">₹<span id="direct-commissions">0.00</span></div>
+        </div>
+        <div class="earnings-card">
+          <h3>Indirect Commissions</h3>
+          <div class="earnings-value">₹<span id="indirect-commissions">0.00</span></div>
+        </div>
+        <div class="earnings-card">
+          <h3>Super Passive</h3>
+          <div class="earnings-value">₹<span id="super-passive">0.00</span></div>
+        </div>
+      </div>
+      
+      <div class="transactions-section">
+        <h2>Transaction History</h2>
+        <div class="transactions-table-container">
+          <table class="transactions-table">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Description</th>
+                <th>Type</th>
+                <th>Amount</th>
+              </tr>
+            </thead>
+            <tbody id="transactions-body">
+              <tr>
+                <td>2024-02-15</td>
+                <td>Commission from Rahul M.</td>
+                <td>Direct</td>
+                <td class="amount-positive">+₹80.00</td>
+              </tr>
+              <tr>
+                <td>2024-02-10</td>
+                <td>Commission from Priya S. (Level 2)</td>
+                <td>Indirect</td>
+                <td class="amount-positive">+₹20.00</td>
+              </tr>
+              <tr>
+                <td>2024-02-05</td>
+                <td>Withdrawal to UPI</td>
+                <td>Withdrawal</td>
+                <td class="amount-negative">-₹100.00</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- Referrals Page -->
+    <section class="page" id="referrals-page">
+      <h1>Your Referral Network</h1>
+      
+      <div class="referral-stats">
+        <div class="stat-card">
+          <div class="stat-icon">
+            <i class="fas fa-user-plus"></i>
+          </div>
+          <div class="stat-content">
+            <h3>Direct Referrals</h3>
+            <div class="stat-value"><span id="direct-referrals">0</span></div>
+          </div>
+        </div>
+        
+        <div class="stat-card">
+          <div class="stat-icon">
+            <i class="fas fa-sitemap"></i>
+          </div>
+          <div class="stat-content">
+            <h3>Indirect Referrals</h3>
+            <div class="stat-value"><span id="indirect-referrals">0</span></div>
+          </div>
+        </div>
+        
+        <div class="stat-card">
+          <div class="stat-icon">
+            <i class="fas fa-chart-pie"></i>
+          </div>
+          <div class="stat-content">
+            <h3>Conversion Rate</h3>
+            <div class="stat-value"><span id="conversion-rate">0</span>%</div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="referral-network">
+        <h2>Your Direct Referrals</h2>
+        <div class="referrals-table-container">
+          <table class="referrals-table">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Joined</th>
+                <th>Package</th>
+                <th>Their Referrals</th>
+                <th>Earnings Generated</th>
+              </tr>
+            </thead>
+            <tbody id="direct-referrals-body">
+              <tr class="expandable-row" data-id="1">
+                <td>Rahul M.</td>
+                <td>Feb 15, 2024</td>
+                <td>Gold</td>
+                <td>3</td>
+                <td>₹240.00</td>
+              </tr>
+              <tr class="expanded-content" data-parent="1">
+                <td colspan="5">
+                  <div class="nested-referrals">
+                    <h4>Rahul's Referrals:</h4>
+                    <table>
+                      <thead>
+                        <tr>
+                          <th>Name</th>
+                          <th>Joined</th>
+                          <th>Package</th>
+                          <th>Earnings For You</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>Neha K.</td>
+                          <td>Feb 20, 2024</td>
+                          <td>Bronze</td>
+                          <td>₹10.00</td>
+                        </tr>
+                        <tr>
+                          <td>Arjun S.</td>
+                          <td>Feb 22, 2024</td>
+                          <td>Gold</td>
+                          <td>₹20.00</td>
+                        </tr>
+                        <tr>
+                          <td>Meera P.</td>
+                          <td>Feb 25, 2024</td>
+                          <td>Diamond</td>
+                          <td>₹30.00</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </td>
+              </tr>
+              <tr class="expandable-row" data-id="2">
+                <td>Priya S.</td>
+                <td>Feb 10, 2024</td>
+                <td>Diamond</td>
+                <td>2</td>
+                <td>₹180.00</td>
+              </tr>
+              <tr class="expanded-content" data-parent="2">
+                <td colspan="5">
+                  <div class="nested-referrals">
+                    <h4>Priya's Referrals:</h4>
+                    <table>
+                      <thead>
+                        <tr>
+                          <th>Name</th>
+                          <th>Joined</th>
+                          <th>Package</th>
+                          <th>Earnings For You</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>Vijay R.</td>
+                          <td>Feb 15, 2024</td>
+                          <td>Bronze</td>
+                          <td>₹10.00</td>
+                        </tr>
+                        <tr>
+                          <td>Sonia T.</td>
+                          <td>Feb 18, 2024</td>
+                          <td>Gold</td>
+                          <td>₹20.00</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- Settings Page -->
+    <section class="page" id="settings-page">
+      <h1>Commission Settings</h1>
+      
+      <div class="settings-card">
+        <h2>Referral Commission Rates</h2>
+        <p>Customize how much commission your referrals earn. Reducing your rates increases their earning potential.</p>
+        
+        <div class="commission-settings">
+          <div class="setting-group">
+            <h3>First-Time Sales Commission</h3>
+            <div class="commission-sliders">
+              <div class="slider-container">
+                <label>Your Commission (Max: 80%)</label>
+                <div class="slider-input-group">
+                  <input type="range" min="50" max="80" value="80" id="first-sale-commission">
+                  <div class="slider-value"><span id="first-sale-value">80</span>%</div>
+                </div>
+              </div>
+              <div class="commission-result">
+                <p>Your Referral Gets: <span id="first-sale-referral">10</span>%</p>
+                <p>Super Passive: <span id="first-sale-passive">5</span>%</p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="setting-group">
+            <h3>Subsequent Sales Commission</h3>
+            <div class="commission-sliders">
+              <div class="slider-container">
+                <label>Your Commission (Max: 60%)</label>
+                <div class="slider-input-group">
+                  <input type="range" min="40" max="60" value="60" id="subsequent-sale-commission">
+                  <div class="slider-value"><span id="subsequent-sale-value">60</span>%</div>
+                </div>
+              </div>
+              <div class="commission-result">
+                <p>Your Referral Gets: <span id="subsequent-sale-referral">20</span>%</p>
+                <p>Super Passive: <span id="subsequent-sale-passive">10</span>%</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <button class="btn-primary" id="save-commission-settings">Save Settings</button>
+      </div>
+      
+      <div class="settings-card">
+        <h2>Payment Settings</h2>
+        <div class="payment-methods">
+          <h3>Withdrawal Method</h3>
+          <div class="payment-options">
+            <div class="payment-option active">
+              <input type="radio" id="upi" name="payment-method" checked>
+              <label for="upi">UPI</label>
+            </div>
+            <div class="payment-option">
+              <input type="radio" id="bank" name="payment-method">
+              <label for="bank">Bank Transfer</label>
+            </div>
+          </div>
+          
+          <div class="payment-details" id="upi-details">
+            <div class="form-group">
+              <label for="upi-id">UPI ID</label>
+              <input type="text" id="upi-id" placeholder="yourname@upi">
+            </div>
+          </div>
+          
+          <div class="payment-details" id="bank-details" style="display: none;">
+            <div class="form-group">
+              <label for="account-name">Account Holder Name</label>
+              <input type="text" id="account-name">
+            </div>
+            <div class="form-group">
+              <label for="account-number">Account Number</label>
+              <input type="text" id="account-number">
+            </div>
+            <div class="form-group">
+              <label for="ifsc-code">IFSC Code</label>
+              <input type="text" id="ifsc-code">
+            </div>
+          </div>
+          
+          <button class="btn-primary" id="save-payment-settings">Save Payment Info</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Profile Page -->
+    <section class="page" id="profile-page">
+      <h1>Profile</h1>
+      
+      <div class="profile-content">
+        <div class="profile-card">
+          <div class="profile-header">
+            <div class="profile-avatar">
+              <img src="https://via.placeholder.com/100" alt="Profile Avatar" id="profile-avatar">
+              <div class="avatar-overlay">
+                <i class="fas fa-camera"></i>
+              </div>
+            </div>
+            <h2 id="profile-name">Loading...</h2>
+            <p id="profile-email">Loading...</p>
+          </div>
+          
+          <div class="profile-form">
+            <div class="form-group">
+              <label for="profile-name-input">Full Name</label>
+              <input type="text" id="profile-name-input">
+            </div>
+            <div class="form-group">
+              <label for="profile-email-input">Email</label>
+              <input type="email" id="profile-email-input" disabled>
+            </div>
+            <div class="form-group">
+              <label for="profile-phone">Phone Number</label>
+              <input type="tel" id="profile-phone">
+            </div>
+            
+            <button class="btn-primary" id="save-profile">Save Changes</button>
+          </div>
+        </div>
+        
+        <div class="profile-card">
+          <h2>Change Password</h2>
+          <div class="password-form">
+            <div class="form-group">
+              <label for="current-password">Current Password</label>
+              <input type="password" id="current-password">
+            </div>
+            <div class="form-group">
+              <label for="new-password">New Password</label>
+              <input type="password" id="new-password">
+            </div>
+            <div class="form-group">
+              <label for="confirm-password">Confirm New Password</label>
+              <input type="password" id="confirm-password">
+            </div>
+            
+            <button class="btn-primary" id="change-password">Update Password</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Modal for Withdrawal -->
+  <div class="modal" id="withdrawal-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Request Withdrawal</h2>
+        <button class="modal-close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p>Available Balance: ₹<span id="modal-balance">0.00</span></p>
+        <div class="form-group">
+          <label for="withdrawal-amount">Amount to Withdraw</label>
+          <input type="number" id="withdrawal-amount" min="100" step="1">
+        </div>
+        <div class="withdrawal-method">
+          <p>Withdraw to: <span id="withdrawal-method-display">UPI: yourname@upi</span></p>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary modal-close-btn">Cancel</button>
+        <button class="btn-primary" id="confirm-withdrawal">Confirm</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+document.addEventListener('DOMContentLoaded', async () => {
+    // Get email from URL query parameter
+    const urlParams = new URLSearchParams(window.location.search);
+    const email = urlParams.get('email') || localStorage.getItem('userEmail');
+
+    if (!email) {
+        window.location.href = '/auth.html'; // Redirect to login if no email
+        return;
+    }
+
+    let data; // Define data variable here to use it later
+    try {
+        const response = await fetch(`/api/dashboard-data?email=${encodeURIComponent(email)}`);
+        data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(data.message || 'Failed to load dashboard data');
+        }
+    } catch (error) {
+        console.error('Error loading dashboard:', error);
+        alert('Failed to load dashboard. Please log in again.');
+        window.location.href = '/auth.html';
+        return;
+    }
+
+    // Page Navigation
+    const navLinks = document.querySelectorAll('.sidebar-nav a');
+    const pages = document.querySelectorAll('.page');
+    
+    navLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            const pageId = link.getAttribute('data-page');
+            
+            // Update active navigation
+            navLinks.forEach(l => l.parentElement.classList.remove('active'));
+            link.parentElement.classList.add('active');
+
+            // Show selected page
+            pages.forEach(page => page.classList.remove('active'));
+            document.getElementById(`${pageId}-page`).classList.add('active');
+        });
+    });
+
+    // Sidebar Toggle for Mobile
+    const sidebar = document.querySelector('.sidebar');
+    const sidebarToggle = document.getElementById('sidebar-toggle');
+    
+    sidebarToggle.addEventListener('click', () => {
+        sidebar.classList.toggle('active');
+    });
+
+    // Update User Info
+    document.getElementById('user-name').textContent = data.name;
+    document.getElementById('user-avatar').src = data.avatarUrl || 'https://via.placeholder.com/40';
+    document.getElementById('profile-name').textContent = data.name;
+    document.getElementById('profile-email').textContent = data.email;
+
+    // Dashboard Stats
+    document.getElementById('total-earnings').textContent = (data.balance || 0).toFixed(2);
+    document.getElementById('total-referrals').textContent = data.totalReferrals || 0;
+    document.getElementById('month-earnings').textContent = (data.monthEarnings || 0).toFixed(2);
+    document.getElementById('network-size').textContent = data.networkSize || 0;
+    document.getElementById('available-balance').textContent = (data.balance || 0).toFixed(2);
+
+    // Referral Link Functionality
+    const referralLink = document.getElementById('referral-link');
+    referralLink.value = data.referralLink || 'No referral link available';
+    
+    referralLink.addEventListener('click', () => {
+        referralLink.select();
+        document.execCommand('copy');
+        alert('Referral link copied to clipboard!');
+    });
+
+    // Social Share Buttons
+    const shareButtons = {
+        whatsapp: `https://api.whatsapp.com/send?text=Join me using my referral link: ${data.referralLink}`,
+        facebook: `https://www.facebook.com/sharer/sharer.php?u=${data.referralLink}`,
+        twitter: `https://twitter.com/intent/tweet?url=${data.referralLink}&text=Join me using my referral link!`,
+        instagram: data.referralLink // Instagram doesn't have direct share API
+    };
+
+    document.querySelectorAll('.share-button').forEach(button => {
+        button.addEventListener('click', () => {
+            const platform = button.classList[1];
+            if (platform === 'instagram') {
+                alert('Copy the link and share it on Instagram manually!');
+                return;
+            }
+            window.open(shareButtons[platform], '_blank');
+        });
+    });
+
+    // Withdrawal Modal
+    const withdrawalModal = document.getElementById('withdrawal-modal');
+    const withdrawButton = document.getElementById('withdraw-button');
+    const modalCloseButtons = document.querySelectorAll('.modal-close, .modal-close-btn');
+    const confirmWithdrawal = document.getElementById('confirm-withdrawal');
+    
+    withdrawButton.addEventListener('click', () => {
+        document.getElementById('modal-balance').textContent = (data.balance || 0).toFixed(2);
+        withdrawalModal.classList.add('active');
+    });
+
+    modalCloseButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            withdrawalModal.classList.remove('active');
+        });
+    });
+
+    confirmWithdrawal.addEventListener('click', () => {
+        const amount = document.getElementById('withdrawal-amount').value;
+        if (amount && amount <= data.balance && amount >= 100) {
+            alert(`Withdrawal request of ₹${amount} submitted successfully!`);
+            withdrawalModal.classList.remove('active');
+        } else {
+            alert('Please enter a valid amount (minimum ₹100, maximum available balance)');
+        }
+    });
+
+    // Expandable Referral Rows
+    document.querySelectorAll('.expandable-row').forEach(row => {
+        row.addEventListener('click', () => {
+            const id = row.getAttribute('data-id');
+            const expandedContent = document.querySelector(`.expanded-content[data-parent="${id}"]`);
+            expandedContent.classList.toggle('active');
+        });
+    });
+
+    // Commission Sliders
+    const updateCommission = (sliderId, valueId, referralId, passiveId, max) => {
+        const slider = document.getElementById(sliderId);
+        const value = document.getElementById(valueId);
+        const referral = document.getElementById(referralId);
+        const passive = document.getElementById(passiveId);
+
+        slider.addEventListener('input', () => {
+            const commission = parseInt(slider.value);
+            value.textContent = commission;
+            const remaining = max - commission;
+            referral.textContent = Math.floor(remaining / 2);
+            passive.textContent = Math.ceil(remaining / 2);
+        });
+    };
+
+    updateCommission('first-sale-commission', 'first-sale-value', 
+        'first-sale-referral', 'first-sale-passive', 95);
+    updateCommission('subsequent-sale-commission', 'subsequent-sale-value', 
+        'subsequent-sale-referral', 'subsequent-sale-passive', 90);
+
+    // Payment Method Toggle
+    document.querySelectorAll('input[name="payment-method"]').forEach(radio => {
+        radio.addEventListener('change', () => {
+            document.getElementById('upi-details').style.display = 
+                radio.id === 'upi' ? 'block' : 'none';
+            document.getElementById('bank-details').style.display = 
+                radio.id === 'bank' ? 'block' : 'none';
+        });
+    });
+
+    // Form Submissions
+    document.getElementById('save-commission-settings').addEventListener('click', () => {
+        const firstSaleCommission = document.getElementById('first-sale-commission').value;
+        const subsequentSaleCommission = document.getElementById('subsequent-sale-commission').value;
+        // Add your API call to save commission settings
+        alert('Commission settings saved!');
+    });
+
+    document.getElementById('save-payment-settings').addEventListener('click', () => {
+        const paymentMethod = document.querySelector('input[name="payment-method"]:checked').id;
+        const paymentDetails = paymentMethod === 'upi' 
+            ? document.getElementById('upi-id').value
+            : {
+                accountName: document.getElementById('account-name').value,
+                accountNumber: document.getElementById('account-number').value,
+                ifscCode: document.getElementById('ifsc-code').value
+            };
+        // Add your API call to save payment settings
+        alert('Payment settings saved!');
+    });
+
+    document.getElementById('save-profile').addEventListener('click', () => {
+        const name = document.getElementById('profile-name-input').value;
+        const phone = document.getElementById('profile-phone').value;
+        if (name && phone) {
+            // Add your API call to update profile
+            document.getElementById('user-name').textContent = name;
+            document.getElementById('profile-name').textContent = name;
+            alert('Profile updated successfully!');
+        } else {
+            alert('Please fill all required fields!');
+        }
+    });
+
+    document.getElementById('change-password').addEventListener('click', () => {
+        const current = document.getElementById('current-password').value;
+        const newPass = document.getElementById('new-password').value;
+        const confirm = document.getElementById('confirm-password').value;
+        
+        if (newPass === confirm && current && newPass) {
+            // Add your API call to change password
+            alert('Password updated successfully!');
+        } else {
+            alert('Please check your password entries!');
+        }
+    });
+
+    // Logout
+    document.getElementById('logout-button').addEventListener('click', () => {
+        localStorage.removeItem('userEmail');
+        window.location.href = '/auth.html';
+    });
+});
+  </script>
+</body>
+</html>
