@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>PrintCraft POD — Catalogue</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink: #0e0e0e;
+      --paper: #f5f0e8;
+      --cream: #ede8dc;
+      --accent: #c8401a;
+      --accent2: #1a3c8f;
+      --muted: #7a7265;
+      --border: #c9c3b6;
+      --white: #fdfaf5;
+      --tag-bg: #e8e2d6;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--paper);
+      color: var(--ink);
+      font-size: 15px;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ── HEADER ── */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--ink);
+      color: var(--paper);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 clamp(20px, 5vw, 60px);
+      height: 62px;
+      border-bottom: 2px solid var(--accent);
+    }
+
+    .logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.6rem;
+      letter-spacing: 0.12em;
+      color: var(--white);
+    }
+    .logo span { color: var(--accent); }
+
+    nav { display: flex; gap: 28px; align-items: center; }
+    nav a {
+      font-size: 0.78rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #c9c3b6;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    nav a:hover { color: var(--accent); }
+
+    /* ── HERO ── */
+    .hero {
+      background: var(--ink);
+      color: var(--white);
+      padding: clamp(60px, 10vw, 120px) clamp(20px, 5vw, 60px) clamp(50px, 8vw, 100px);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: 'DTF';
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(120px, 28vw, 320px);
+      color: rgba(255,255,255,0.03);
+      position: absolute;
+      right: -2%;
+      top: 50%;
+      transform: translateY(-50%);
+      letter-spacing: 0.05em;
+      pointer-events: none;
+      line-height: 1;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      background: var(--accent);
+      color: white;
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 5px 14px;
+      margin-bottom: 24px;
+    }
+
+    .hero h1 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(52px, 10vw, 110px);
+      line-height: 0.92;
+      letter-spacing: 0.02em;
+      margin-bottom: 28px;
+    }
+
+    .hero h1 em {
+      font-style: normal;
+      color: var(--accent);
+      display: block;
+    }
+
+    .hero p {
+      font-size: clamp(14px, 1.8vw, 18px);
+      color: #a8a29e;
+      max-width: 520px;
+      line-height: 1.7;
+      margin-bottom: 40px;
+      font-weight: 300;
+    }
+
+    .hero-stats {
+      display: flex;
+      gap: clamp(24px, 4vw, 60px);
+      flex-wrap: wrap;
+    }
+
+    .stat {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .stat-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2.2rem;
+      color: var(--white);
+      line-height: 1;
+    }
+    .stat-label {
+      font-size: 0.72rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    /* ── PROCESS STRIP ── */
+    .process-strip {
+      background: var(--accent);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 0;
+      overflow: hidden;
+    }
+
+    .process-step {
+      display: flex;
+      align-items: center;
+      padding: 14px 28px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .process-step + .process-step::before {
+      content: '→';
+      margin-right: 28px;
+      opacity: 0.6;
+    }
+
+    /* ── SECTION FRAMEWORK ── */
+    .section {
+      padding: clamp(50px, 7vw, 90px) clamp(20px, 5vw, 60px);
+    }
+
+    .section-header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      margin-bottom: 48px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--border);
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .section-label {
+      font-size: 0.68rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      font-weight: 600;
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    .section-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(32px, 5vw, 54px);
+      letter-spacing: 0.04em;
+      line-height: 1;
+    }
+
+    /* ── PRINTING INFO GRID ── */
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+    }
+
+    .info-card {
+      background: var(--white);
+      padding: 28px;
+    }
+
+    .info-card-label {
+      font-size: 0.65rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+
+    .info-card-value {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--ink);
+      line-height: 1.4;
+    }
+
+    .info-card-value.price {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2rem;
+      color: var(--accent);
+    }
+
+    .info-card-sub {
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    /* ── PRODUCT TABS ── */
+    .product-tabs {
+      display: flex;
+      gap: 4px;
+      flex-wrap: wrap;
+      margin-bottom: 36px;
+    }
+
+    .tab-btn {
+      padding: 10px 24px;
+      background: transparent;
+      border: 1.5px solid var(--border);
+      color: var(--muted);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.82rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.18s;
+    }
+
+    .tab-btn:hover {
+      border-color: var(--ink);
+      color: var(--ink);
+    }
+
+    .tab-btn.active {
+      background: var(--ink);
+      border-color: var(--ink);
+      color: var(--white);
+    }
+
+    /* ── PRODUCT PANEL ── */
+    .product-panel { display: none; }
+    .product-panel.active { display: block; }
+
+    .product-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      align-items: start;
+    }
+
+    @media (max-width: 800px) {
+      .product-layout { grid-template-columns: 1fr; }
+    }
+
+    .product-meta {
+      background: var(--white);
+      border: 1px solid var(--border);
+      padding: 32px;
+    }
+
+    .product-icon {
+      font-size: 3rem;
+      margin-bottom: 20px;
+      display: block;
+    }
+
+    .product-name {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2.4rem;
+      letter-spacing: 0.04em;
+      margin-bottom: 6px;
+    }
+
+    .product-fabric {
+      font-size: 0.82rem;
+      color: var(--muted);
+      margin-bottom: 24px;
+      padding-bottom: 24px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .meta-block {
+      margin-bottom: 24px;
+    }
+
+    .meta-block-title {
+      font-size: 0.65rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+
+    /* ── VARIANTS TABLE ── */
+    .variants-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.88rem;
+    }
+
+    .variants-table th {
+      text-align: left;
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--muted);
+      padding: 8px 12px;
+      background: var(--cream);
+      font-weight: 500;
+    }
+
+    .variants-table td {
+      padding: 12px 12px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+    }
+
+    .variants-table tr:last-child td { border-bottom: none; }
+    .variants-table tr:hover td { background: var(--cream); }
+
+    .price-tag {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.4rem;
+      color: var(--accent);
+    }
+
+    .price-tbd {
+      font-size: 0.78rem;
+      color: var(--muted);
+      font-style: italic;
+    }
+
+    .gsm-badge {
+      display: inline-block;
+      background: var(--tag-bg);
+      color: var(--ink);
+      font-family: 'DM Mono', monospace;
+      font-size: 0.72rem;
+      padding: 2px 8px;
+      margin-bottom: 4px;
+    }
+
+    .note-list {
+      list-style: none;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .note-list li {
+      background: var(--tag-bg);
+      font-size: 0.72rem;
+      padding: 3px 10px;
+      color: var(--ink);
+    }
+
+    /* ── SIZE CHART ── */
+    .size-table-wrap {
+      overflow-x: auto;
+    }
+
+    .size-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+    }
+
+    .size-table th {
+      background: var(--ink);
+      color: var(--white);
+      text-align: center;
+      padding: 10px 14px;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.72rem;
+      letter-spacing: 0.1em;
+      font-weight: 500;
+    }
+
+    .size-table td {
+      text-align: center;
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--border);
+      font-family: 'DM Mono', monospace;
+      font-size: 0.82rem;
+    }
+
+    .size-table tr:first-child td { font-weight: 600; }
+    .size-table tr:hover td { background: var(--cream); }
+
+    .size-note {
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin-top: 10px;
+      font-style: italic;
+    }
+
+    /* ── COLOR SWATCHES ── */
+    .color-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .color-chip {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 0.78rem;
+      color: var(--ink);
+      padding: 4px 10px 4px 6px;
+      background: var(--white);
+      border: 1px solid var(--border);
+    }
+
+    .color-dot {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      border: 1px solid rgba(0,0,0,0.12);
+    }
+
+    /* ── SEASONAL BADGE ── */
+    .seasonal-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #fff4e0;
+      color: #a0600a;
+      border: 1px solid #f0c876;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 5px 12px;
+      margin-bottom: 16px;
+    }
+
+    /* ── NOTES SECTION ── */
+    .notes-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 16px;
+    }
+
+    .note-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--accent2);
+      padding: 20px 24px;
+      font-size: 0.88rem;
+      line-height: 1.6;
+      color: var(--ink);
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--ink);
+      color: #7a7265;
+      text-align: center;
+      padding: 36px 20px;
+      font-size: 0.8rem;
+      letter-spacing: 0.05em;
+    }
+    footer strong { color: var(--white); }
+    footer a { color: var(--accent); text-decoration: none; }
+
+    /* ── CONTACT STRIP ── */
+    .contact-strip {
+      background: var(--cream);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 24px clamp(20px, 5vw, 60px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 48px;
+      flex-wrap: wrap;
+    }
+
+    .contact-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.88rem;
+    }
+
+    .contact-label {
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .contact-value {
+      font-weight: 600;
+      color: var(--ink);
+    }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .hero > * {
+      animation: fadeUp 0.6s ease both;
+    }
+    .hero .hero-badge { animation-delay: 0.1s; }
+    .hero h1 { animation-delay: 0.2s; }
+    .hero p { animation-delay: 0.3s; }
+    .hero-stats { animation-delay: 0.4s; }
+
+    @media (max-width: 600px) {
+      nav { display: none; }
+      .process-step { font-size: 0.68rem; padding: 12px 16px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── HEADER ── -->
+<header>
+  <div class="logo" id="site-logo">PRINT<span>CRAFT</span> POD</div>
+  <nav>
+    <a href="#printing">Printing Info</a>
+    <a href="#catalogue">Catalogue</a>
+    <a href="#notes">Notes</a>
+    <a href="#contact">Contact</a>
+  </nav>
+</header>
+
+<!-- ── HERO ── -->
+<section class="hero">
+  <div class="hero-badge" id="hero-badge">Print On Demand — B2B Catalogue</div>
+  <h1 id="hero-title">Launch Your<br><em>Clothing Brand</em></h1>
+  <p id="hero-subtitle">Zero inventory. Premium DTF printing technology. Built for startups, fashion labels, and established clothing brands looking to scale.</p>
+  <div class="hero-stats" id="hero-stats">
+    <div class="stat">
+      <span class="stat-num">DTF</span>
+      <span class="stat-label">Printing Method</span>
+    </div>
+    <div class="stat">
+      <span class="stat-num">50+</span>
+      <span class="stat-label">Wash Durability</span>
+    </div>
+    <div class="stat">
+      <span class="stat-num">1–2</span>
+      <span class="stat-label">Days Turnaround</span>
+    </div>
+    <div class="stat">
+      <span class="stat-num">4</span>
+      <span class="stat-label">Product Categories</span>
+    </div>
+  </div>
+</section>
+
+<!-- ── PROCESS STRIP ── -->
+<div class="process-strip">
+  <div class="process-step">You Send Design</div>
+  <div class="process-step">DTF Film Printed</div>
+  <div class="process-step">Applied to Garment</div>
+  <div class="process-step">Packaged & Dispatched</div>
+</div>
+
+<!-- ── PRINTING INFO ── -->
+<section class="section" id="printing">
+  <div class="section-header">
+    <div>
+      <span class="section-label">How It Works</span>
+      <h2 class="section-title">Printing Details</h2>
+    </div>
+  </div>
+
+  <div class="info-grid" id="printing-grid">
+    <!-- filled by JS -->
+  </div>
+</section>
+
+<!-- ── CATALOGUE ── -->
+<section class="section" id="catalogue" style="background: var(--cream);">
+  <div class="section-header">
+    <div>
+      <span class="section-label">Products</span>
+      <h2 class="section-title">Product Catalogue</h2>
+    </div>
+  </div>
+
+  <div class="product-tabs" id="product-tabs">
+    <!-- filled by JS -->
+  </div>
+
+  <div id="product-panels">
+    <!-- filled by JS -->
+  </div>
+</section>
+
+<!-- ── NOTES ── -->
+<section class="section" id="notes">
+  <div class="section-header">
+    <div>
+      <span class="section-label">Important</span>
+      <h2 class="section-title">Notes & Guidelines</h2>
+    </div>
+  </div>
+  <div class="notes-grid" id="notes-grid">
+    <!-- filled by JS -->
+  </div>
+</section>
+
+<!-- ── CONTACT ── -->
+<div class="contact-strip" id="contact">
+  <!-- filled by JS -->
+</div>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <p><strong id="footer-name">PRINTCRAFT POD</strong> &mdash; B2B Print On Demand Catalogue &mdash; All prices exclude 5% GST &mdash; <a href="admin.html">Admin</a></p>
+</footer>
+
+<script src="data.js"></script>
+<script>
+  const COLOR_MAP = {
+    "Black": "#1a1a1a", "White": "#f5f5f0", "Lavender": "#b89ec4",
+    "Beige": "#d4b896", "Coffee": "#6f4e37", "Navy Blue": "#1a2f5e",
+    "Pink": "#f4a7c0", "Olive Green": "#6b7c40", "Dark Green": "#1e4620",
+    "Green": "#4a8c3f", "Cherry": "#8b1a2a", "Skin": "#e8c4a0",
+    "Grey": "#8a8a8a", "Neon Yellow": "#e8f500", "Red": "#cc2200",
+    "Peach": "#f4a472", "Sky Blue": "#6ab4e8", "Yellow": "#f0c800",
+    "Bright Red": "#e01010"
+  };
+
+  function init() {
+    const D = POD_DATA;
+
+    // Logo & Hero
+    document.getElementById('site-logo').innerHTML = D.business.name.replace(' POD', '') + '<span> POD</span>';
+    document.getElementById('footer-name').textContent = D.business.name;
+    document.getElementById('hero-subtitle').textContent = D.business.subtitle;
+
+    // Printing Grid
+    const pg = document.getElementById('printing-grid');
+    const printItems = [
+      { label: 'Printing Method', value: D.printing.method },
+      { label: 'DTF Sheet Price', value: `₹${D.printing.sheetPrice}`, sub: D.printing.sheetUnit, isPrice: true },
+      { label: 'Print Durability', value: D.printing.durability },
+      { label: 'Production Time (New Sheet)', value: D.printing.productionTime.withNewSheet },
+      { label: 'Production Time (Sheet Ready)', value: D.printing.productionTime.withReadySheet },
+      { label: 'Basic Packaging', value: D.printing.packaging.basic },
+      { label: 'Custom Packaging', value: D.printing.packaging.custom },
+      { label: 'GST', value: `${D.printing.gst.rate}%`, sub: D.printing.gst.note, isPrice: true },
+    ];
+    pg.innerHTML = printItems.map(i => `
+      <div class="info-card">
+        <div class="info-card-label">${i.label}</div>
+        <div class="info-card-value ${i.isPrice ? 'price' : ''}">${i.value}</div>
+        ${i.sub ? `<div class="info-card-sub">${i.sub}</div>` : ''}
+      </div>
+    `).join('');
+
+    // Product Tabs & Panels
+    const tabs = document.getElementById('product-tabs');
+    const panels = document.getElementById('product-panels');
+
+    D.products.forEach((product, i) => {
+      // Tab
+      const btn = document.createElement('button');
+      btn.className = 'tab-btn' + (i === 0 ? ' active' : '');
+      btn.textContent = product.icon + ' ' + product.name;
+      btn.onclick = () => {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.product-panel').forEach(p => p.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById('panel-' + product.id).classList.add('active');
+      };
+      tabs.appendChild(btn);
+
+      // Panel
+      const panel = document.createElement('div');
+      panel.className = 'product-panel' + (i === 0 ? ' active' : '');
+      panel.id = 'panel-' + product.id;
+
+      // Colors — handle variant-specific or global
+      let colorHTML = '';
+      const hasVariantColors = product.variants.some(v => v.colors);
+      if (hasVariantColors) {
+        product.variants.forEach(v => {
+          if (v.colors && Array.isArray(v.colors)) {
+            colorHTML += `<div style="margin-bottom:12px"><div class="meta-block-title" style="margin-bottom:6px">${v.name}</div><div class="color-grid">`;
+            colorHTML += v.colors.map(c => `
+              <div class="color-chip">
+                <div class="color-dot" style="background:${COLOR_MAP[c] || '#ccc'}"></div>
+                ${c}
+              </div>`).join('');
+            colorHTML += '</div></div>';
+          }
+        });
+      } else {
+        colorHTML = '<div class="color-grid">' + product.colors.map(c =>
+          COLOR_MAP[c]
+            ? `<div class="color-chip"><div class="color-dot" style="background:${COLOR_MAP[c]}"></div>${c}</div>`
+            : `<div style="font-size:0.82rem;color:var(--muted);font-style:italic">${c}</div>`
+        ).join('') + '</div>';
+      }
+
+      // Size chart
+      let sizeHTML = '';
+      if (product.sizeChart) {
+        const sc = product.sizeChart;
+        sizeHTML = `
+          <div class="size-table-wrap">
+            <table class="size-table">
+              <thead><tr>${sc.headers.map(h => `<th>${h}</th>`).join('')}</tr></thead>
+              <tbody>${sc.rows.map(r => `<tr>${r.map(c => `<td>${c}</td>`).join('')}</tr>`).join('')}</tbody>
+            </table>
+          </div>
+          <div class="size-note">⚠ ${sc.note}</div>
+        `;
+      }
+
+      panel.innerHTML = `
+        <div class="product-layout">
+          <div class="product-meta">
+            <span class="product-icon">${product.icon}</span>
+            ${product.seasonal ? '<div class="seasonal-badge">⚡ Seasonal Product — Limited Stock</div>' : ''}
+            <div class="product-name">${product.name}</div>
+            <div class="product-fabric">${product.fabric}</div>
+
+            <div class="meta-block">
+              <div class="meta-block-title">Variants & Pricing</div>
+              <table class="variants-table">
+                <thead><tr><th>Type</th><th>GSM</th><th>Price</th><th>Notes</th></tr></thead>
+                <tbody>
+                  ${product.variants.map(v => `
+                    <tr>
+                      <td>${v.name}</td>
+                      <td><span class="gsm-badge">${v.gsm} GSM</span></td>
+                      <td>${v.price ? `<span class="price-tag">₹${v.price}</span>` : '<span class="price-tbd">Contact for price</span>'}</td>
+                      <td><ul class="note-list">${v.notes.map(n => `<li>${n}</li>`).join('')}</ul></td>
+                    </tr>
+                  `).join('')}
+                </tbody>
+              </table>
+            </div>
+
+            <div class="meta-block">
+              <div class="meta-block-title">Available Fits</div>
+              <ul class="note-list">${product.fits.map(f => `<li>${f}</li>`).join('')}</ul>
+            </div>
+          </div>
+
+          <div>
+            <div class="product-meta" style="margin-bottom:20px">
+              <div class="meta-block-title" style="margin-bottom:14px">Available Colors</div>
+              ${colorHTML}
+            </div>
+
+            <div class="product-meta">
+              <div class="meta-block-title" style="margin-bottom:14px">Size Chart (inches)</div>
+              ${sizeHTML}
+            </div>
+          </div>
+        </div>
+      `;
+
+      panels.appendChild(panel);
+    });
+
+    // Notes
+    const ng = document.getElementById('notes-grid');
+    ng.innerHTML = D.notes.map(n => `<div class="note-card">${n}</div>`).join('');
+
+    // Contact
+    const cs = document.getElementById('contact');
+    cs.innerHTML = [
+      { label: 'Phone', value: D.business.phone },
+      { label: 'Email', value: D.business.email },
+      { label: 'Instagram', value: D.business.instagram },
+    ].map(c => `
+      <div class="contact-item">
+        <div>
+          <div class="contact-label">${c.label}</div>
+          <div class="contact-value">${c.value}</div>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  init();
+</script>
+</body>
+</html>

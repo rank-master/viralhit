@@ -1,0 +1,909 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin — PrintCraft POD</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink: #0e0e0e;
+      --paper: #f5f0e8;
+      --cream: #ede8dc;
+      --accent: #c8401a;
+      --accent2: #1a3c8f;
+      --muted: #7a7265;
+      --border: #c9c3b6;
+      --white: #fdfaf5;
+      --green: #1a6b3c;
+      --red: #9b1a1a;
+      --tag-bg: #e8e2d6;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'DM Sans', sans-serif; background: #1a1a1a; color: #e8e2d6; font-size: 14px; line-height: 1.6; }
+
+    /* LOGIN */
+    #login-screen {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #111;
+    }
+
+    .login-box {
+      background: #1e1e1e;
+      border: 1px solid #333;
+      border-top: 3px solid var(--accent);
+      padding: 48px 40px;
+      width: 100%;
+      max-width: 380px;
+    }
+
+    .login-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.8rem;
+      letter-spacing: 0.1em;
+      margin-bottom: 6px;
+      color: #e8e2d6;
+    }
+    .login-logo span { color: var(--accent); }
+
+    .login-sub {
+      font-size: 0.78rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #666;
+      margin-bottom: 36px;
+    }
+
+    .form-group { margin-bottom: 18px; }
+    .form-group label {
+      display: block;
+      font-size: 0.68rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: #888;
+      margin-bottom: 7px;
+    }
+
+    .form-group input {
+      width: 100%;
+      background: #111;
+      border: 1px solid #333;
+      color: #e8e2d6;
+      padding: 11px 14px;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.9rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .form-group input:focus { border-color: var(--accent); }
+
+    .login-btn {
+      width: 100%;
+      background: var(--accent);
+      border: none;
+      color: white;
+      padding: 13px;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.1rem;
+      letter-spacing: 0.15em;
+      cursor: pointer;
+      margin-top: 8px;
+      transition: background 0.2s;
+    }
+    .login-btn:hover { background: #a83315; }
+
+    .login-error {
+      background: rgba(200,64,26,0.15);
+      border: 1px solid var(--accent);
+      color: #f08070;
+      padding: 10px 14px;
+      font-size: 0.82rem;
+      margin-top: 14px;
+      display: none;
+    }
+
+    /* ADMIN SHELL */
+    #admin-shell { display: none; min-height: 100vh; }
+
+    .admin-header {
+      background: #111;
+      border-bottom: 1px solid #2a2a2a;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 28px;
+      height: 58px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .admin-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.4rem;
+      letter-spacing: 0.1em;
+      color: #e8e2d6;
+    }
+    .admin-logo span { color: var(--accent); }
+    .admin-logo em { font-style: normal; font-size: 0.7rem; color: #555; letter-spacing: 0.15em; margin-left: 10px; }
+
+    .header-actions { display: flex; gap: 12px; align-items: center; }
+
+    .btn {
+      padding: 7px 18px;
+      border: none;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+    .btn:hover { opacity: 0.85; }
+    .btn-accent { background: var(--accent); color: white; }
+    .btn-ghost { background: transparent; border: 1px solid #444; color: #aaa; }
+    .btn-green { background: var(--green); color: white; }
+    .btn-red { background: var(--red); color: white; }
+    .btn-sm { padding: 4px 12px; font-size: 0.72rem; }
+
+    .admin-body {
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      min-height: calc(100vh - 58px);
+    }
+
+    /* SIDEBAR */
+    .admin-sidebar {
+      background: #161616;
+      border-right: 1px solid #2a2a2a;
+      padding: 24px 0;
+    }
+
+    .sidebar-section {
+      margin-bottom: 28px;
+    }
+
+    .sidebar-label {
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: #444;
+      padding: 0 20px;
+      margin-bottom: 8px;
+    }
+
+    .sidebar-link {
+      display: block;
+      padding: 9px 20px;
+      color: #888;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: all 0.15s;
+      border-left: 2px solid transparent;
+    }
+    .sidebar-link:hover { color: #ddd; background: rgba(255,255,255,0.04); }
+    .sidebar-link.active { color: #e8e2d6; border-left-color: var(--accent); background: rgba(200,64,26,0.1); }
+
+    /* MAIN */
+    .admin-main {
+      padding: 32px;
+      overflow-y: auto;
+    }
+
+    .admin-page { display: none; }
+    .admin-page.active { display: block; }
+
+    .page-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.8rem;
+      letter-spacing: 0.06em;
+      margin-bottom: 6px;
+      color: #e8e2d6;
+    }
+
+    .page-sub {
+      font-size: 0.8rem;
+      color: #666;
+      margin-bottom: 28px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid #2a2a2a;
+    }
+
+    /* CARDS */
+    .edit-card {
+      background: #1e1e1e;
+      border: 1px solid #2a2a2a;
+      border-radius: 2px;
+      margin-bottom: 20px;
+      overflow: hidden;
+    }
+
+    .edit-card-header {
+      background: #252525;
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .edit-card-title {
+      font-family: 'Bebas Neue', sans-serif;
+      letter-spacing: 0.06em;
+      font-size: 1rem;
+      color: #ddd;
+    }
+
+    .edit-card-body {
+      padding: 20px;
+    }
+
+    .edit-card-body.collapsed { display: none; }
+
+    /* FORM FIELDS */
+    .field-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+
+    .field-row.single { grid-template-columns: 1fr; }
+    .field-row.triple { grid-template-columns: 1fr 1fr 1fr; }
+
+    .field { display: flex; flex-direction: column; gap: 5px; }
+    .field label {
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: #666;
+    }
+
+    .field input, .field textarea, .field select {
+      background: #111;
+      border: 1px solid #333;
+      color: #e8e2d6;
+      padding: 9px 12px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.88rem;
+      outline: none;
+      transition: border-color 0.2s;
+      width: 100%;
+      resize: vertical;
+    }
+
+    .field input:focus, .field textarea:focus, .field select:focus { border-color: var(--accent); }
+
+    /* TAG EDITOR */
+    .tag-editor {
+      border: 1px solid #333;
+      background: #111;
+      padding: 8px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      min-height: 44px;
+      cursor: text;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: #2a2a2a;
+      color: #ccc;
+      padding: 3px 8px;
+      font-size: 0.78rem;
+    }
+
+    .tag-x {
+      cursor: pointer;
+      color: #666;
+      font-size: 0.9rem;
+      line-height: 1;
+    }
+    .tag-x:hover { color: var(--accent); }
+
+    .tag-input {
+      border: none;
+      background: transparent;
+      color: #e8e2d6;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.85rem;
+      outline: none;
+      min-width: 120px;
+      flex: 1;
+    }
+
+    /* VARIANT ITEM */
+    .variant-item {
+      background: #222;
+      border: 1px solid #333;
+      padding: 16px;
+      margin-bottom: 12px;
+    }
+
+    .variant-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .variant-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.78rem;
+      color: #888;
+    }
+
+    /* NOTE ITEM */
+    .note-item {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 10px;
+      align-items: center;
+    }
+
+    .note-item textarea {
+      flex: 1;
+      min-height: 52px;
+    }
+
+    /* SAVE TOAST */
+    #save-toast {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      background: var(--green);
+      color: white;
+      padding: 12px 24px;
+      font-weight: 600;
+      font-size: 0.85rem;
+      letter-spacing: 0.08em;
+      display: none;
+      z-index: 999;
+      animation: fadeUp 0.3s ease;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* DIVIDER */
+    .divider {
+      border: none;
+      border-top: 1px solid #2a2a2a;
+      margin: 20px 0;
+    }
+
+    @media (max-width: 700px) {
+      .admin-body { grid-template-columns: 1fr; }
+      .admin-sidebar { display: none; }
+      .field-row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login-screen">
+  <div class="login-box">
+    <div class="login-logo">PRINT<span>CRAFT</span> POD</div>
+    <div class="login-sub">Admin Panel</div>
+    <div class="form-group">
+      <label>Username</label>
+      <input type="text" id="login-user" autocomplete="username" placeholder="Enter username" />
+    </div>
+    <div class="form-group">
+      <label>Password</label>
+      <input type="password" id="login-pass" autocomplete="current-password" placeholder="Enter password" />
+    </div>
+    <button class="login-btn" onclick="doLogin()">Login →</button>
+    <div class="login-error" id="login-error">Invalid credentials. Please try again.</div>
+  </div>
+</div>
+
+<!-- ADMIN SHELL -->
+<div id="admin-shell">
+  <div class="admin-header">
+    <div class="admin-logo">PRINT<span>CRAFT</span> POD <em>ADMIN</em></div>
+    <div class="header-actions">
+      <button class="btn btn-green" onclick="saveAll()">💾 Save All Changes</button>
+      <button class="btn btn-ghost" onclick="previewSite()">👁 Preview Site</button>
+      <button class="btn btn-ghost btn-sm" onclick="doLogout()">Logout</button>
+    </div>
+  </div>
+
+  <div class="admin-body">
+    <div class="admin-sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-label">General</div>
+        <div class="sidebar-link active" onclick="showPage('business')">🏢 Business Info</div>
+        <div class="sidebar-link" onclick="showPage('printing')">🖨 Printing Details</div>
+        <div class="sidebar-link" onclick="showPage('notes')">📌 Notes</div>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-label">Products</div>
+        <div class="sidebar-link" onclick="showPage('tshirts')">👕 T-Shirts</div>
+        <div class="sidebar-link" onclick="showPage('hoodies')">🧥 Hoodies</div>
+        <div class="sidebar-link" onclick="showPage('sweatshirts')">🧶 Sweatshirts</div>
+        <div class="sidebar-link" onclick="showPage('polo')">👔 Polo T-Shirts</div>
+      </div>
+    </div>
+
+    <div class="admin-main">
+
+      <!-- BUSINESS PAGE -->
+      <div class="admin-page active" id="page-business">
+        <div class="page-title">Business Info</div>
+        <div class="page-sub">Update your brand name, contact details, and hero text shown on the website.</div>
+        <div class="edit-card">
+          <div class="edit-card-body" id="biz-fields"></div>
+        </div>
+      </div>
+
+      <!-- PRINTING PAGE -->
+      <div class="admin-page" id="page-printing">
+        <div class="page-title">Printing Details</div>
+        <div class="page-sub">Manage DTF pricing, production times, and packaging info.</div>
+        <div class="edit-card">
+          <div class="edit-card-body" id="printing-fields"></div>
+        </div>
+      </div>
+
+      <!-- NOTES PAGE -->
+      <div class="admin-page" id="page-notes">
+        <div class="page-title">Notes & Guidelines</div>
+        <div class="page-sub">These notes appear at the bottom of the catalogue for all clients.</div>
+        <div class="edit-card">
+          <div class="edit-card-body">
+            <div id="notes-list"></div>
+            <button class="btn btn-accent" onclick="addNote()">+ Add Note</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- PRODUCT PAGES -->
+      <div class="admin-page" id="page-tshirts">
+        <div class="page-title">T-Shirts</div>
+        <div class="page-sub">Edit fabric info, variants, pricing, colors, and size chart.</div>
+        <div id="prod-tshirts"></div>
+      </div>
+      <div class="admin-page" id="page-hoodies">
+        <div class="page-title">Hoodies</div>
+        <div class="page-sub">Edit fabric info, variants, pricing, colors, and size chart.</div>
+        <div id="prod-hoodies"></div>
+      </div>
+      <div class="admin-page" id="page-sweatshirts">
+        <div class="page-title">Sweatshirts</div>
+        <div class="page-sub">Edit fabric info, variants, pricing, colors, and size chart.</div>
+        <div id="prod-sweatshirts"></div>
+      </div>
+      <div class="admin-page" id="page-polo">
+        <div class="page-title">Polo T-Shirts</div>
+        <div class="page-sub">Edit fabric info, variants, pricing, colors, and size chart.</div>
+        <div id="prod-polo"></div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div id="save-toast">✓ Changes saved successfully!</div>
+
+<script src="data.js"></script>
+<script>
+  // ── AUTH ──
+  const ADMIN_USER = 'printcraft';
+  const ADMIN_PASS = 'pod@admin2025';
+
+  function doLogin() {
+    const u = document.getElementById('login-user').value;
+    const p = document.getElementById('login-pass').value;
+    if (u === ADMIN_USER && p === ADMIN_PASS) {
+      document.getElementById('login-screen').style.display = 'none';
+      document.getElementById('admin-shell').style.display = 'block';
+      buildAdmin();
+    } else {
+      document.getElementById('login-error').style.display = 'block';
+    }
+  }
+
+  document.getElementById('login-pass').addEventListener('keydown', e => {
+    if (e.key === 'Enter') doLogin();
+  });
+
+  function doLogout() {
+    document.getElementById('admin-shell').style.display = 'none';
+    document.getElementById('login-screen').style.display = 'flex';
+    document.getElementById('login-user').value = '';
+    document.getElementById('login-pass').value = '';
+  }
+
+  // ── NAVIGATION ──
+  function showPage(id) {
+    document.querySelectorAll('.admin-page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
+    document.getElementById('page-' + id).classList.add('active');
+    event.currentTarget.classList.add('active');
+  }
+
+  function previewSite() {
+    window.open('index.html', '_blank');
+  }
+
+  // ── LIVE DATA (mutable copy) ──
+  let DATA = JSON.parse(JSON.stringify(POD_DATA));
+
+  // ── BUILD ADMIN ──
+  function buildAdmin() {
+    buildBusiness();
+    buildPrinting();
+    buildNotes();
+    DATA.products.forEach(buildProduct);
+  }
+
+  // ── FIELD HELPERS ──
+  function textField(id, label, val, path) {
+    return `
+      <div class="field">
+        <label>${label}</label>
+        <input type="text" value="${esc(val)}" oninput="setPath('${path}', this.value)" />
+      </div>`;
+  }
+
+  function numField(id, label, val, path) {
+    return `
+      <div class="field">
+        <label>${label}</label>
+        <input type="number" value="${val || ''}" oninput="setPath('${path}', parseFloat(this.value) || 0)" />
+      </div>`;
+  }
+
+  function textareaField(id, label, val, path) {
+    return `
+      <div class="field">
+        <label>${label}</label>
+        <textarea oninput="setPath('${path}', this.value)">${esc(val)}</textarea>
+      </div>`;
+  }
+
+  function esc(s) { return String(s || '').replace(/"/g, '&quot;').replace(/</g, '&lt;'); }
+
+  function setPath(path, value) {
+    const parts = path.split('.');
+    let obj = DATA;
+    for (let i = 0; i < parts.length - 1; i++) {
+      if (parts[i].includes('[')) {
+        const [k, idx] = parts[i].split('[');
+        obj = obj[k][parseInt(idx)];
+      } else {
+        obj = obj[parts[i]];
+      }
+    }
+    const last = parts[parts.length - 1];
+    obj[last] = value;
+  }
+
+  // ── BUSINESS ──
+  function buildBusiness() {
+    const b = DATA.business;
+    document.getElementById('biz-fields').innerHTML = `
+      <div class="field-row">${textField('', 'Business Name', b.name, 'business.name')}${textField('', 'Tagline', b.tagline, 'business.tagline')}</div>
+      <div class="field-row single">${textareaField('', 'Hero Subtitle', b.subtitle, 'business.subtitle')}</div>
+      <div class="field-row triple">
+        ${textField('', 'Phone', b.phone, 'business.phone')}
+        ${textField('', 'Email', b.email, 'business.email')}
+        ${textField('', 'Instagram', b.instagram, 'business.instagram')}
+      </div>
+    `;
+  }
+
+  // ── PRINTING ──
+  function buildPrinting() {
+    const p = DATA.printing;
+    document.getElementById('printing-fields').innerHTML = `
+      <div class="field-row">
+        ${textField('', 'Printing Method', p.method, 'printing.method')}
+        ${numField('', 'DTF Sheet Price (₹)', p.sheetPrice, 'printing.sheetPrice')}
+      </div>
+      <div class="field-row">
+        ${textField('', 'Sheet Unit', p.sheetUnit, 'printing.sheetUnit')}
+        ${textField('', 'Durability', p.durability, 'printing.durability')}
+      </div>
+      <hr class="divider">
+      <div class="field-row">
+        ${textareaField('', 'Production Time (New Sheet)', p.productionTime.withNewSheet, 'printing.productionTime.withNewSheet')}
+        ${textareaField('', 'Production Time (Sheet Ready)', p.productionTime.withReadySheet, 'printing.productionTime.withReadySheet')}
+      </div>
+      <hr class="divider">
+      <div class="field-row">
+        ${textField('', 'Basic Packaging Price', p.packaging.basic, 'printing.packaging.basic')}
+        ${textField('', 'Custom Packaging Info', p.packaging.custom, 'printing.packaging.custom')}
+      </div>
+      <hr class="divider">
+      <div class="field-row">
+        ${numField('', 'GST Rate (%)', p.gst.rate, 'printing.gst.rate')}
+        ${textField('', 'GST Note', p.gst.note, 'printing.gst.note')}
+      </div>
+    `;
+  }
+
+  // ── NOTES ──
+  function buildNotes() {
+    renderNotes();
+  }
+
+  function renderNotes() {
+    const nl = document.getElementById('notes-list');
+    nl.innerHTML = DATA.notes.map((note, i) => `
+      <div class="note-item">
+        <textarea oninput="DATA.notes[${i}] = this.value">${esc(note)}</textarea>
+        <button class="btn btn-red btn-sm" onclick="removeNote(${i})">✕</button>
+      </div>
+    `).join('');
+  }
+
+  function addNote() {
+    DATA.notes.push('New note here...');
+    renderNotes();
+  }
+
+  function removeNote(i) {
+    DATA.notes.splice(i, 1);
+    renderNotes();
+  }
+
+  // ── PRODUCT ──
+  function buildProduct(product) {
+    const container = document.getElementById('prod-' + product.id);
+    if (!container) return;
+    renderProduct(product.id);
+  }
+
+  function renderProduct(id) {
+    const product = DATA.products.find(p => p.id === id);
+    const idx = DATA.products.findIndex(p => p.id === id);
+    const container = document.getElementById('prod-' + id);
+
+    container.innerHTML = '';
+
+    // Basic Info
+    const basicCard = makeCard('Basic Info', `
+      <div class="field-row">
+        ${textField('', 'Product Name', product.name, `products[${idx}].name`)}
+        ${textField('', 'Icon (emoji)', product.icon, `products[${idx}].icon`)}
+      </div>
+      <div class="field-row single">
+        ${textField('', 'Fabric Description', product.fabric, `products[${idx}].fabric`)}
+      </div>
+    `);
+    container.appendChild(basicCard);
+
+    // Variants
+    const varBody = document.createElement('div');
+    varBody.id = 'variants-' + id;
+    renderVariants(id, idx, varBody);
+    const varCard = makeCollapsibleCard('Variants & Pricing', varBody);
+    container.appendChild(varCard);
+
+    const addVarBtn = document.createElement('button');
+    addVarBtn.className = 'btn btn-accent';
+    addVarBtn.style.marginTop = '-12px';
+    addVarBtn.style.marginBottom = '20px';
+    addVarBtn.textContent = '+ Add Variant';
+    addVarBtn.onclick = () => {
+      product.variants.push({ name: 'New Variant', gsm: 200, price: 0, notes: [] });
+      renderVariants(id, idx, varBody);
+    };
+    container.appendChild(addVarBtn);
+
+    // Colors
+    const colCard = makeCard('Available Colors', buildTagEditor(
+      product.colors,
+      (newColors) => { product.colors = newColors; }
+    ));
+    container.appendChild(colCard);
+
+    // Fits
+    const fitsCard = makeCard('Available Fits', buildTagEditor(
+      product.fits,
+      (newFits) => { product.fits = newFits; }
+    ));
+    container.appendChild(fitsCard);
+
+    // Size Chart
+    const scCard = makeCard('Size Chart', buildSizeChartEditor(product, idx));
+    container.appendChild(scCard);
+  }
+
+  function renderVariants(id, idx, container) {
+    const product = DATA.products[idx];
+    container.innerHTML = '';
+    product.variants.forEach((v, vi) => {
+      const div = document.createElement('div');
+      div.className = 'variant-item';
+      div.innerHTML = `
+        <div class="variant-header">
+          <span class="variant-label">Variant #${vi + 1}</span>
+          <button class="btn btn-red btn-sm" onclick="removeVariant('${id}', ${idx}, ${vi})">Remove</button>
+        </div>
+        <div class="field-row triple">
+          <div class="field"><label>Name</label><input type="text" value="${esc(v.name)}" oninput="DATA.products[${idx}].variants[${vi}].name = this.value" /></div>
+          <div class="field"><label>GSM</label><input type="number" value="${v.gsm || ''}" oninput="DATA.products[${idx}].variants[${vi}].gsm = parseInt(this.value)||0" /></div>
+          <div class="field"><label>Price (₹) — leave 0 if TBD</label><input type="number" value="${v.price || ''}" oninput="DATA.products[${idx}].variants[${vi}].price = parseFloat(this.value)||null" /></div>
+        </div>
+        <div class="field" style="margin-top:10px"><label>Notes (hit Enter to add)</label></div>
+      `;
+      const notesWrap = document.createElement('div');
+      const tagEl = buildTagEditor(v.notes, (newNotes) => {
+        DATA.products[idx].variants[vi].notes = newNotes;
+      });
+      div.appendChild(tagEl);
+      container.appendChild(div);
+    });
+  }
+
+  function removeVariant(id, idx, vi) {
+    DATA.products[idx].variants.splice(vi, 1);
+    const varBody = document.getElementById('variants-' + id);
+    renderVariants(id, idx, varBody);
+  }
+
+  function buildTagEditor(tags, onChange) {
+    const wrap = document.createElement('div');
+    wrap.className = 'tag-editor';
+
+    let localTags = [...tags];
+
+    function render() {
+      wrap.innerHTML = '';
+      localTags.forEach((t, i) => {
+        const tag = document.createElement('span');
+        tag.className = 'tag';
+        tag.innerHTML = `${esc(t)} <span class="tag-x" data-i="${i}">×</span>`;
+        tag.querySelector('.tag-x').onclick = () => {
+          localTags.splice(i, 1);
+          onChange(localTags);
+          render();
+        };
+        wrap.appendChild(tag);
+      });
+      const inp = document.createElement('input');
+      inp.className = 'tag-input';
+      inp.placeholder = 'Type & press Enter...';
+      inp.onkeydown = (e) => {
+        if (e.key === 'Enter' && inp.value.trim()) {
+          localTags.push(inp.value.trim());
+          onChange(localTags);
+          render();
+        }
+        if (e.key === 'Backspace' && !inp.value && localTags.length) {
+          localTags.pop();
+          onChange(localTags);
+          render();
+        }
+      };
+      wrap.appendChild(inp);
+    }
+
+    render();
+    return wrap;
+  }
+
+  function buildSizeChartEditor(product, idx) {
+    const sc = product.sizeChart;
+    if (!sc) return document.createElement('div');
+
+    const wrap = document.createElement('div');
+    wrap.innerHTML = `
+      <p style="font-size:0.78rem;color:#888;margin-bottom:14px">Edit sizes directly in the table below. Click any cell to edit.</p>
+      <div class="size-table-wrap">
+        <table id="sc-table-${product.id}" style="border-collapse:collapse;width:100%">
+          <thead><tr id="sc-head-${product.id}"></tr></thead>
+          <tbody id="sc-body-${product.id}"></tbody>
+        </table>
+      </div>
+      <div class="field" style="margin-top:12px">
+        <label>Table Note</label>
+        <input type="text" value="${esc(sc.note)}" oninput="DATA.products[${idx}].sizeChart.note = this.value" />
+      </div>
+    `;
+
+    setTimeout(() => {
+      const head = document.getElementById('sc-head-' + product.id);
+      const body = document.getElementById('sc-body-' + product.id);
+
+      head.innerHTML = sc.headers.map(h =>
+        `<th style="background:#222;color:#ccc;padding:8px 12px;text-align:center;font-size:0.72rem;letter-spacing:0.1em;border:1px solid #333">${h}</th>`
+      ).join('');
+
+      sc.rows.forEach((row, ri) => {
+        const tr = document.createElement('tr');
+        row.forEach((cell, ci) => {
+          const td = document.createElement('td');
+          td.style.cssText = 'border:1px solid #333;padding:0;text-align:center';
+          const inp = document.createElement('input');
+          inp.style.cssText = 'background:transparent;border:none;color:#e8e2d6;padding:8px 12px;text-align:center;width:100%;font-family:DM Mono,monospace;font-size:0.82rem;outline:none';
+          inp.value = cell;
+          inp.oninput = () => {
+            DATA.products[idx].sizeChart.rows[ri][ci] = inp.value;
+          };
+          td.appendChild(inp);
+          tr.appendChild(td);
+        });
+        body.appendChild(tr);
+      });
+    }, 50);
+
+    return wrap;
+  }
+
+  // ── CARD BUILDERS ──
+  function makeCard(title, content) {
+    const card = document.createElement('div');
+    card.className = 'edit-card';
+    if (typeof content === 'string') {
+      card.innerHTML = `
+        <div class="edit-card-header"><div class="edit-card-title">${title}</div></div>
+        <div class="edit-card-body">${content}</div>
+      `;
+    } else {
+      const body = document.createElement('div');
+      body.className = 'edit-card-body';
+      body.appendChild(content);
+      const hdr = document.createElement('div');
+      hdr.className = 'edit-card-header';
+      hdr.innerHTML = `<div class="edit-card-title">${title}</div>`;
+      card.appendChild(hdr);
+      card.appendChild(body);
+    }
+    return card;
+  }
+
+  function makeCollapsibleCard(title, bodyEl) {
+    const card = document.createElement('div');
+    card.className = 'edit-card';
+    const hdr = document.createElement('div');
+    hdr.className = 'edit-card-header';
+    hdr.innerHTML = `<div class="edit-card-title">${title}</div><span style="color:#666;font-size:0.8rem">▲ collapse</span>`;
+    const body = document.createElement('div');
+    body.className = 'edit-card-body';
+    body.appendChild(bodyEl);
+    hdr.onclick = () => {
+      body.classList.toggle('collapsed');
+      hdr.querySelector('span').textContent = body.classList.contains('collapsed') ? '▼ expand' : '▲ collapse';
+    };
+    card.appendChild(hdr);
+    card.appendChild(body);
+    return card;
+  }
+
+  // ── SAVE ──
+  function saveAll() {
+    // Serialize DATA back into the data.js format
+    const content = `const POD_DATA = ${JSON.stringify(DATA, null, 2)};`;
+    const blob = new Blob([content], { type: 'application/javascript' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'data.js';
+    a.click();
+    URL.revokeObjectURL(a.href);
+    const toast = document.getElementById('save-toast');
+    toast.style.display = 'block';
+    setTimeout(() => toast.style.display = 'none', 3000);
+  }
+</script>
+
+</body>
+</html>
